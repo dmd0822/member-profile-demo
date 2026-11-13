@@ -67,13 +67,23 @@ specs/[###-feature]/
 
 ```text
 src/
-  frontend/          # Angular / TypeScript
-  backend/           # C# / .NET 11
-  shared/            # Shared contracts and reusable libraries when required
-tests/               # Frontend, backend, integration, and API contract tests
-infra/               # Bicep modules and deployment parameters
-docs/                # Architecture docs, ADRs, and diagrams
-.github/workflows/   # Separate infrastructure and application CI/CD
+  frontend/              # Angular / TypeScript
+    src/app/
+      components/        # Reusable UI components
+      pages/             # Routed member-facing views
+      services/          # API clients and frontend application services
+  backend/               # C# / .NET 11
+    Models/              # Backend domain and data models
+    Services/            # Business logic and application services
+    Api/                 # HTTP endpoints, request handling, and middleware
+  shared/                # Shared contracts and reusable libraries when required
+tests/
+  unit/                  # Isolated frontend and backend logic tests
+  integration/           # Service and data-access integration tests
+  contract/              # Public API request and response contract tests
+infra/                   # Bicep modules and deployment parameters
+docs/                    # Architecture docs, ADRs, and diagrams
+.github/workflows/       # Separate infrastructure and application CI/CD
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real

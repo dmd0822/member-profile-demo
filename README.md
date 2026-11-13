@@ -21,9 +21,19 @@ Directories are created when needed; this is not a list of existing components.
 ```text
 src/                 Application code only
   frontend/          Angular frontend (TypeScript)
+    src/app/
+      components/    Reusable UI components
+      pages/         Routed member-facing views
+      services/      API clients and frontend application services
   backend/           .NET 11 backend (C#), member APIs, and Azure-hosted services
+    Models/          Backend domain and data models
+    Services/        Business logic and application services
+    Api/             HTTP endpoints, request handling, and middleware
   shared/            Shared API contracts, member schemas, and reusable libraries
 tests/               Unit, integration, and public API contract tests
+  unit/              Isolated frontend and backend logic tests
+  integration/       Service and data-access integration tests
+  contract/          Public API request and response contract tests
 infra/               Bicep infrastructure as code, modules, and deployment parameters only
 docs/                Architecture docs, ADRs, architecture plans, and diagrams
 specs/               Spec Kit feature specs, implementation plans, tasks, and contracts
