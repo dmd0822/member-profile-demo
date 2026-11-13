@@ -67,6 +67,36 @@ documentation-only work, do not manufacture application features or tests.
 If a skill is unavailable, read its definition under `.github/skills/` and report
 the limitation. Never claim a skill ran when it did not.
 
+## Project Structure
+
+Use the member-services layout documented in `README.md`:
+
+```text
+src/                 Application code only
+  cloud/             Azure-hosted member APIs, Functions, and Container Apps services
+  shared/            Shared API contracts, member schemas, and reusable libraries
+tests/               Unit, integration, and public API contract tests
+infra/               Bicep infrastructure as code, modules, and deployment parameters only
+docs/                Architecture docs, ADRs, architecture plans, and diagrams
+specs/               Spec Kit feature specs, implementation plans, tasks, and contracts
+.github/workflows/   Separate infrastructure and application CI/CD workflows
+```
+
+- Keep application runtime code out of `infra/` and `docs/`, and infrastructure
+  definitions out of `src/`. Do not add a device or Raspberry Pi runtime layer.
+- Put shared code in `src/shared/` only when reuse is required by the approved
+  feature; do not create speculative abstractions.
+- Keep Spec Kit feature artifacts in `specs/<feature>/`, not `docs/`. Keep Spec Kit
+  configuration, templates, and the constitution in `.specify/`.
+- Keep tests outside `src/` and organize them by test type and service as needed.
+- Separate infrastructure validation/deployment from application build/test/deployment
+  in distinct workflow files. Scope triggers to relevant paths, including shared
+  code, tests, and build configuration where applicable, so dependent checks are
+  not skipped. Preserve required checks and environment approvals; do not leave
+  required checks pending because a path-filtered workflow never starts.
+- Create directories and workflow files only when required by approved work.
+  This layout is guidance, not a request to scaffold or deploy the system.
+
 ## Implementation Guardrails
 
 - Follow the constitution's .NET 8 / C#, Azure Functions and Container Apps,
