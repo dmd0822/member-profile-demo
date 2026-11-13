@@ -40,6 +40,39 @@ Classify the work before implementation:
   or to the user and request the specific decision or access needed. Do not guess
   requirements, self-approve, or bypass security controls.
 
+## Architecture and Documentation Toolkit
+
+For architecture discovery, use the repository's Member Services Azure Architect
+agent and read `.github/instructions/architecture.instructions.md`, including
+when no architecture file exists yet. For documentation work, use the Member
+Services Technical Writer agent and
+`.github/instructions/documentation.instructions.md`.
+
+The `create-architectural-decision-record` and `documentation-writer` skills
+support proposed decisions and audience-focused documentation. Architecture
+discovery may precede implementation planning, but does not replace approved
+specs, authorize implementation, or automatically advance the Spec Kit workflow.
+Keep decisions proposed until the required human review is recorded.
+
+See README.md for usage and `.github/AWESOME-COPILOT-NOTICE.md` for upstream
+provenance and licensing.
+
+## Implementation and Review Toolkit
+
+The Member Services C# Expert supports approved backend work; the Member Services
+Accessibility Expert supports scoped Angular accessibility review and authorized
+fixes. Apply the C#, security, and accessibility instruction files under
+`.github/instructions/` to their matching files.
+
+Use `api-breaking-change-detector` for requested C#/Angular contract-drift
+reviews and `test-gap-audit` for behavioral test coverage reviews. Both default
+to read-only analysis and do not replace executable contract tests, measured
+coverage, required security scans, or human approval. The optional test-gap
+helper is a heuristic file matcher, not a coverage runner.
+
+Installing this toolkit does not authorize scaffolding or implementation before
+the existing Spec Kit approval gates.
+
 ## Spec Kit Workflow
 
 For features, use the installed Copilot skills in order, reviewing each artifact:

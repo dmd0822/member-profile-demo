@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+.specify/
+.github/skills/speckit-*/
+.github/skills/test-gap-audit/scripts/
+**/bin/
+**/obj/
+**/dist/
+**/coverage/
