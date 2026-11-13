@@ -174,8 +174,11 @@ specs/               Spec Kit feature specs, implementation plans, tasks, and co
 - Require contract tests for every public API endpoint and at least 80% line
   coverage on business logic. Evaluate the p95 API latency target of under 300 ms
   against the expected peak load defined in the spec or plan, not an invented load.
-- Use approved internal package feeds and perform license and vulnerability checks
-  before introducing dependencies. Do not substitute public feeds if access fails.
+- Use the approved internal npm feed locally and public npm for public npm
+  dependencies in GitHub Actions. Private dependencies and non-npm packages use
+  approved internal feeds everywhere. Perform license and vulnerability checks
+  before introducing dependencies; never fall back to another registry on failure
+  or send private package identities or credentials to public npm.
 - Deploy infrastructure through Bicep and pipelines. Do not make test or production
   portal changes or deploy merely because implementation is complete.
 - Apply the constitution's responsible-AI requirements when the feature uses AI.

@@ -1,14 +1,18 @@
 # Development tooling
 
 The root npm package contains repository checks only. It does not scaffold the
-Angular frontend, .NET backend, infrastructure, or application pipelines.
+Angular frontend, .NET backend, or infrastructure. The CI foundation executes
+repository checks but does not build applications or deploy resources.
 
 ## Setup
 
 Use Node.js 22.17 or newer and npm. The repository's `.npmrc` selects the approved
 internal feed, `https://packagefeedproxy.microsoft.io/npm/`. Obtain any required
 feed access through the organization's approved process; never commit credentials
-or substitute a public registry when access fails.
+or substitute a public registry when local access fails. GitHub Actions uses
+`https://registry.npmjs.org/` explicitly for public npm dependencies, as adopted in
+constitution v2.3.0. Private dependencies and non-npm packages use approved internal
+feeds in every environment; their names and credentials must not reach public npm.
 
 From the repository root, restore the pinned dependency tree:
 
@@ -17,6 +21,11 @@ npm ci --ignore-scripts
 ```
 
 The package lock records exact dependency versions and integrity values.
+The `.npmrc` option `omit-lockfile-registry-resolved=true` keeps registry-specific
+tarball URLs out of the lock so npm resolves the same pinned tree through the
+explicitly selected registry. Do not remove integrity values or check in internal
+tarball URLs; a registry override alone cannot override URLs already in a lock.
+
 Dependencies must pass license and vulnerability review before changes are
 accepted. Use `npm audit` against the internal registry; report an unsupported or
 unavailable audit service as a blocked check, not a clean result.
@@ -39,10 +48,62 @@ do not remove them or upgrade blindly without rerunning the audit and checks.
 | `npm run test:tooling`  | Run focused tests for local link resolution and anchor failures without network access. |
 | `npm run format`        | Explicitly rewrite supported files with Prettier during local development.              |
 
-Use the check-only commands in CI when an approved runner and internal-feed
-authentication are configured. This change does not add a workflow or assume
-that a public GitHub-hosted runner can reach the internal feed. Required build,
-test, security, and approval checks remain separate.
+Use check-only commands in CI. Required application build/test, SAST, secret
+scanning, business coverage, public API contracts, and human approvals remain
+separate; repository tooling does not satisfy those obligations.
+
+## CI workflows and package policy
+
+| Workflow                                  | Stable result job        | Current responsibility                                                                                  |
+| ----------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/application-ci.yml`    | Application CI result    | Restore public tooling, run `npm run test:tooling`, `npm run lint`, and `npm audit --audit-level=high`. |
+| `.github/workflows/infrastructure-ci.yml` | Infrastructure CI result | Report Bicep readiness and block affected infrastructure lacking executable validation.                 |
+
+Both use Node.js 22 on GitHub-hosted Ubuntu with SHA-pinned checkout/setup-node
+Actions, `contents: read`, and checkout credential persistence disabled. Neither
+receives secrets, write permissions, or cloud identities. They run on every pull
+request, push to `main`, and manual dispatch; dispatch validates only.
+
+`.github/scripts/ci-foundation.mjs` compares event revisions against their merge
+base. Rename detection is disabled so both deleted and added paths are considered.
+A failed comparison fails the job instead of silently selecting nothing. Manual
+runs evaluate tracked paths. Runtime code selects application validation; Bicep
+selects infrastructure; shared contracts, tests, and common configuration select
+both. Workflow-specific configuration selects its own domain. Repository
+formatting, documentation checks, and tooling tests run once in application CI,
+including on documentation-only changes. No workflow path filters leave these
+result jobs pending.
+
+Angular/.NET build/test and Bicep validation currently report **not implemented**,
+with prerequisites. An affected domain containing runtime/infrastructure files
+fails until approved executable checks are added. Removing the last domain file
+still selects and blocks its unavailable validation. An unrelated docs-only
+change can pass the actual foundation checks without claiming missing checks
+passed. SAST and secret scanning are not implemented by these workflows.
+
+Before any npm retrieval or audit, the helper validates manifest and locked
+dependency identities against `.github/ci/public-npm-packages.json`, the public
+inventory of the existing tooling tree. Unknown identities, aliases, URL/Git/file
+sources, missing integrity, registry-specific resolved URLs, and inconsistent
+direct dependency declarations stop retrieval with a generic error. Inventory
+changes require human public/private classification review together with the
+normal license and vulnerability review. Do not copy private names into the
+inventory. It guards accidental dependency disclosure, not malicious code
+approved by a maintainer.
+
+Actions explicitly passes `--registry=https://registry.npmjs.org/`. Local
+execution passes the internal registry instead; no global/local registry is
+rewritten. Restores use `--ignore-scripts --audit=false --fund=false`, followed by
+an explicit audit after policy validation. Failures are not retried through
+another feed. Private/non-npm dependency support requires approved internal-feed
+access and is not activated on untrusted runners by this foundation.
+
+After hosted runs exist, a maintainer can configure the two stable result jobs
+as required checks. This change does not configure branch protection or enable
+deployment. Future CD needs an approved deployment spec, real projects/Bicep,
+targets, environments, least-privilege identities, required validation/security
+checks, and environment approvals. No deployment route activates merely because
+project files appear. See the [validation guide](../specs/001-separate-ci-pipelines/quickstart.md).
 
 Link checking requests the URLs found in Markdown; it does not upload documents
 or source code. Do not put credentials, PII, or confidential query parameters in

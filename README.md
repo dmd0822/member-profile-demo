@@ -94,7 +94,10 @@ Source revisions and license notices are included in the attribution file above.
 
 Documentation checks use markdownlint-cli2, Prettier, and markdown-link-check.
 A root `.editorconfig` supplies shared editor settings. Use Node.js 22.17+ and the
-approved internal npm feed configured in `.npmrc`:
+approved internal npm feed configured in `.npmrc` for local work. GitHub Actions
+uses public npm for public npm dependencies; private dependencies and non-npm
+packages stay on approved internal feeds everywhere. Feed failures never authorize
+registry fallback:
 
 ```powershell
 npm ci --ignore-scripts
@@ -104,8 +107,31 @@ npm run lint
 `npm run lint` does not rewrite files; use `npm run format` for explicit local
 formatting. See [development tooling](docs/development-tooling.md) for individual
 checks, scope exclusions, feed access, and the language-specific linters to add
-when application projects exist. No application scaffold or CI workflow is
-created by this setup.
+when application projects exist.
+
+## CI foundation
+
+[Application CI](.github/workflows/application-ci.yml) and
+[Infrastructure CI](.github/workflows/infrastructure-ci.yml) are separate,
+read-only workflows. Both run for pull requests, pushes to `main`, and manual
+validation. No workflow-level path filters strand required checks on docs-only
+changes. Their stable job names are **Application CI result** and
+**Infrastructure CI result**; a maintainer can require these checks after
+observing their first hosted runs. Branch protections are not configured here.
+
+Application CI restores the reviewed public tooling tree, runs repository lint
+and tooling tests, and audits public dependencies for high/critical vulnerabilities.
+Infrastructure CI independently reports Bicep-validation readiness. Missing
+Angular/.NET and Bicep checks are explicitly **not implemented**. Introducing
+domain files blocks the affected gate until approved executable validation is
+added; no application or infrastructure projects are scaffolded by this setup.
+
+**CD is not enabled.** No cloud authentication, resource changes, or deployment
+jobs exist. Future build/test, SAST, secret scanning, coverage, contract checks,
+and deployment targets/identities/environment approvals remain prerequisites,
+not checks these foundation workflows have passed. See the
+[approved scope](specs/001-separate-ci-pipelines/spec.md) and
+[validation guide](specs/001-separate-ci-pipelines/quickstart.md).
 
 ## Technology stack
 
