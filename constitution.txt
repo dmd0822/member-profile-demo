@@ -85,6 +85,24 @@ current behavior and structure of the project.*
    scan, dependency scan) and a link to its spec.
 6. AI-generated code is held to the same review standard as human code.
 
+## GitHub Planning and Task Tracking
+- Each feature implementation plan (`plan.md`) MUST have a corresponding GitHub
+  milestone in this repository. The milestone description MUST link to the
+  feature's spec and plan; `plan.md` MUST record the milestone URL.
+- Each task in `tasks.md` MUST have a corresponding GitHub issue assigned to that
+  milestone. The issue MUST identify the feature and task ID, link to the spec and
+  plan, and describe the task scope, acceptance criteria, and dependencies.
+  `tasks.md` MUST record the issue URL for each task.
+- Plans and tasks remain the source of implementation detail. Changes to scope,
+  dependencies, or completion status MUST be reflected in the linked GitHub
+  milestone and issues as part of the same work.
+- Before creating tracking items, check existing feature links and task IDs and
+  reuse matching milestones and issues. Do not duplicate items when rerunning
+  planning or task generation.
+- If GitHub access or permissions prevent synchronization, report the blocker
+  and record pending tracking items. Do not invent URLs or claim synchronization
+  succeeded.
+
 ## Governance
 - This constitution overrides conflicting team conventions and agent defaults.
 - Exceptions MUST be recorded in `plan.md` under "Complexity Tracking", with the
@@ -93,4 +111,4 @@ current behavior and structure of the project.*
   bump the version, and update dependent templates.
 - Compliance is reviewed at each release.
 
-**Version**: 2.1.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 2.2.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13

@@ -4,7 +4,14 @@
 
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
+**GitHub Milestone**: [URL of the corresponding feature milestone, or an explicit synchronization blocker]
+
 **Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
+
+Create or reuse one repository milestone for this feature plan. Link the spec and
+plan in its description, record the milestone URL above, and keep it aligned with
+scope and progress changes. Check existing feature links before creating a
+milestone; report GitHub access failures instead of claiming synchronization.
 
 ## Summary
 

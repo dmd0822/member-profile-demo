@@ -9,6 +9,16 @@ description: "Task list template for feature implementation"
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
+**GitHub Milestone**: [Use the milestone URL recorded in plan.md]
+
+**GitHub Tracking**: Create or reuse one GitHub issue per task and assign it to
+the feature milestone. Each issue includes the feature and task ID, spec and plan
+links, scope, acceptance criteria, and dependencies. Append the issue link to the
+corresponding task description without changing its task ID or checkbox format.
+Keep scope, dependencies, and completion status synchronized. Check existing
+feature/task mappings before creating issues to avoid duplicates. Record pending
+items and report access failures; never invent issue or milestone URLs.
+
 **Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.

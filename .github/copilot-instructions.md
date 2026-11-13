@@ -67,6 +67,18 @@ documentation-only work, do not manufacture application features or tests.
 If a skill is unavailable, read its definition under `.github/skills/` and report
 the limitation. Never claim a skill ran when it did not.
 
+### GitHub Tracking
+
+- Create or reuse one GitHub milestone per feature plan and record its URL in
+  `plan.md`. Link the spec and plan from the milestone description.
+- Create or reuse one GitHub issue per task, assign it to the feature milestone,
+  and record its URL in `tasks.md`. Include the feature and task ID, spec and plan
+  links, scope, acceptance criteria, and dependencies in each issue.
+- Keep artifact and GitHub scope, dependency, and completion information aligned.
+  Check existing links and task IDs before creating items to avoid duplicates.
+- Report access or permission failures and record pending synchronization.
+  Never invent tracking URLs or silently treat synchronization as complete.
+
 ## Project Structure
 
 Use the member-services layout documented in `README.md`:

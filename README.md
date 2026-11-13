@@ -57,3 +57,15 @@ test, and deploy the Angular frontend and .NET 11 backend. Scope triggers to
 relevant paths while accounting for shared code, tests, and build configuration.
 Preserve required checks and
 environment approvals, and avoid path filters that leave required checks pending.
+
+## GitHub planning and task tracking
+
+Each Spec Kit feature plan maps to a GitHub milestone. Each task maps to a GitHub
+issue assigned to that milestone. Record the milestone URL in `plan.md` and the
+issue URL alongside each task in `tasks.md`; link back to the feature spec and
+plan from GitHub.
+
+Keep scope, dependencies, and completion status aligned between the feature
+artifacts and GitHub. Reuse existing milestones and issues to avoid duplicates,
+and report permission or access blockers rather than claiming synchronization
+succeeded. See the constitution for the full tracking requirements.
