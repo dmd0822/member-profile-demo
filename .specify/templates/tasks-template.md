@@ -13,6 +13,11 @@ description: "Task list template for feature implementation"
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
+**Documentation**: Include tasks to review affected documentation and README files
+and update them alongside the implementation in the same PR. Cover changed setup,
+usage, contracts, configuration, architecture, structure, and deployment guidance.
+If no documentation updates are needed, record the reason in the PR description.
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
@@ -21,10 +26,12 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Frontend**: Angular / TypeScript in `src/frontend/`
+- **Backend**: C# / .NET 11 in `src/backend/`
+- **Shared**: `src/shared/` for required shared contracts and reusable libraries
+- **Tests**: `tests/` outside application source
+- **Infrastructure**: Bicep in `infra/`; separate infra and application CI/CD in `.github/workflows/`
+- Adjust sample paths below to the concrete structure in plan.md without changing these boundaries.
 
 <!--
   ============================================================================
@@ -50,7 +57,7 @@ description: "Task list template for feature implementation"
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
+- [ ] T002 Initialize Angular frontend and .NET 11 backend projects as required by plan.md
 - [ ] T003 [P] Configure linting and formatting tools
 
 ---
@@ -89,10 +96,10 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T012 [P] [US1] Create [Entity1] model in src/backend/Models/[Entity1].cs
+- [ ] T013 [P] [US1] Create [Entity2] model in src/backend/Models/[Entity2].cs
+- [ ] T014 [US1] Implement [Service] in src/backend/Services/[Service].cs (depends on T012, T013)
+- [ ] T015 [US1] Implement [endpoint/feature] in src/backend/[location]/[File].cs
 - [ ] T016 [US1] Add validation and error handling
 - [ ] T017 [US1] Add logging for user story 1 operations
 
@@ -113,9 +120,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T020 [P] [US2] Create [Entity] model in src/backend/Models/[Entity].cs
+- [ ] T021 [US2] Implement [Service] in src/backend/Services/[Service].cs
+- [ ] T022 [US2] Implement [endpoint/feature] in src/backend/[location]/[File].cs
 - [ ] T023 [US2] Integrate with User Story 1 components (if needed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
@@ -135,9 +142,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create [Entity] model in src/backend/Models/[Entity].cs
+- [ ] T027 [US3] Implement [Service] in src/backend/Services/[Service].cs
+- [ ] T028 [US3] Implement [endpoint/feature] in src/backend/[location]/[File].cs
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -204,8 +211,8 @@ Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
 Task: "Integration test for [user journey] in tests/integration/test_[name].py"
 
 # Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
+Task: "Create [Entity1] model in src/backend/Models/[Entity1].cs"
+Task: "Create [Entity2] model in src/backend/Models/[Entity2].cs"
 ```
 
 ---

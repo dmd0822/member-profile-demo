@@ -49,8 +49,26 @@ public exposure.*
 - Prompts, model versions and evaluation results are version-controlled.
 - Content safety filters stay enabled; grounding data honors source permissions.
 
+### VIII. Documentation Stays Current
+- Every change MUST include a review of affected documentation and README files.
+  Any documentation made inaccurate or incomplete by the change MUST be updated
+  in the same PR, not deferred to later work.
+- Updates MUST cover affected setup instructions, usage examples, API contracts,
+  configuration, architecture, project structure, and deployment guidance.
+- PRs MUST identify the documentation updated. If no documentation updates are
+  needed, the PR MUST explain why; unrelated documentation edits are not required.
+*Rationale: documentation is part of the deliverable and must describe the
+current behavior and structure of the project.*
+
 ## Additional Constraints
-- **Stack:** .NET 8 / C#, Azure Functions and Container Apps, Azure SQL, Bicep for IaC.
+- **Frontend:** Angular with TypeScript in `src/frontend/`. The Angular version
+  and compatible toolchain MUST be recorded in `plan.md`.
+- **Backend:** C# using .NET 11 in `src/backend/`, with Azure Functions and
+  Container Apps as appropriate to the approved design.
+- **Data and infrastructure:** Azure SQL and Bicep for IaC. Infrastructure
+  definitions belong in `infra/`; shared contracts and reusable libraries belong
+  in `src/shared/`. Cross-stack contracts MUST be language-neutral or supported by
+  generated language-specific clients.
 - **Dependencies:** packages come only from approved internal feeds; no new
   dependency without a license and vulnerability check.
 - **Infrastructure:** all resources are deployed by IaC through pipelines; no
@@ -75,4 +93,4 @@ public exposure.*
   bump the version, and update dependent templates.
 - Compliance is reviewed at each release.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 2.1.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13

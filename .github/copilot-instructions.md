@@ -73,7 +73,8 @@ Use the member-services layout documented in `README.md`:
 
 ```text
 src/                 Application code only
-  cloud/             Azure-hosted member APIs, Functions, and Container Apps services
+  frontend/          Angular frontend (TypeScript)
+  backend/           .NET 11 backend (C#), member APIs, and Azure-hosted services
   shared/            Shared API contracts, member schemas, and reusable libraries
 tests/               Unit, integration, and public API contract tests
 infra/               Bicep infrastructure as code, modules, and deployment parameters only
@@ -85,12 +86,15 @@ specs/               Spec Kit feature specs, implementation plans, tasks, and co
 - Keep application runtime code out of `infra/` and `docs/`, and infrastructure
   definitions out of `src/`. Do not add a device or Raspberry Pi runtime layer.
 - Put shared code in `src/shared/` only when reuse is required by the approved
-  feature; do not create speculative abstractions.
+  feature; do not create speculative abstractions. Keep cross-stack contracts
+  language-neutral or generate language-specific clients; Angular must not
+  directly depend on C# implementation libraries.
 - Keep Spec Kit feature artifacts in `specs/<feature>/`, not `docs/`. Keep Spec Kit
   configuration, templates, and the constitution in `.specify/`.
 - Keep tests outside `src/` and organize them by test type and service as needed.
 - Separate infrastructure validation/deployment from application build/test/deployment
-  in distinct workflow files. Scope triggers to relevant paths, including shared
+  in distinct workflow files. Application workflows must cover the Angular
+  frontend and .NET 11 backend. Scope triggers to relevant paths, including shared
   code, tests, and build configuration where applicable, so dependent checks are
   not skipped. Preserve required checks and environment approvals; do not leave
   required checks pending because a path-filtered workflow never starts.
@@ -99,8 +103,11 @@ specs/               Spec Kit feature specs, implementation plans, tasks, and co
 
 ## Implementation Guardrails
 
-- Follow the constitution's .NET 8 / C#, Azure Functions and Container Apps,
-  Azure SQL, and Bicep stack. Keep changes minimal and scoped to the current spec.
+- Implement the frontend in Angular with TypeScript under `src/frontend/` and the
+  backend in C# using .NET 11 under `src/backend/`. Follow the constitution's Azure
+  Functions and Container Apps, Azure SQL, and Bicep stack. Record the Angular
+  version and compatible toolchain in `plan.md`. Keep changes minimal and scoped
+  to the current spec.
 - Use Microsoft Entra ID and managed identities. Unavoidable secrets belong in
   Azure Key Vault, never source, configuration files, or pipelines.
 - Preserve private data-service access, resource-scoped least privilege,
@@ -126,6 +133,9 @@ specs/               Spec Kit feature specs, implementation plans, tasks, and co
   the issue number when available.
 - Follow any repository PR template. Explain why the change is needed, summarize
   the approach, link the relevant spec, and identify risks, exceptions, and reviews.
+- Review affected documentation and README files for every change and update them
+  in the same PR. Identify the documentation updated in the PR description, or
+  explain why no documentation updates are needed. Do not defer required updates.
 - Use `Closes #<issue-number>` only when the PR fully resolves that issue. For
   partial work, use `Relates to #<issue-number>`; qualify cross-repository references
   with `owner/repo`. Do not invent issue numbers.
