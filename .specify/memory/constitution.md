@@ -1,50 +1,78 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Member Services API Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec Before Code
+Every feature MUST start from an approved spec (`spec.md`) that states the user
+need, acceptance criteria and out-of-scope items. Plans and tasks MUST trace back
+to a requirement in the spec. No implementation begins while the spec still has
+an open `[NEEDS CLARIFICATION]` marker.
+*Rationale: rework from unclear requirements costs more than writing the spec.*
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Security and Identity by Default
+- Services MUST authenticate with Microsoft Entra ID and managed identities; no
+  API keys, connection strings or shared secrets in code, config or pipelines.
+- Secrets that cannot be avoided MUST live in Azure Key Vault.
+- Data services MUST use private endpoints; public network access is disabled.
+- Least privilege: role assignments are scoped to the resource, never the
+  subscription.
+*Rationale: regulated data; auditors expect identity-based access with no
+public exposure.*
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Data Protection and Privacy
+- PII and account data MUST be classified, encrypted at rest (customer-managed keys
+  where required) and in transit (TLS 1.2+).
+- PII MUST NOT appear in logs, traces, test fixtures or prompts to AI models.
+- Data stays in approved US regions.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Test-First Quality (NON-NEGOTIABLE)
+- Tests are written from the acceptance criteria before implementation and MUST
+  fail first.
+- Minimum 80% line coverage on business logic; every bug fix adds a regression test.
+- Contract tests are required for every public API endpoint.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Observability and Auditability
+- Structured logging, distributed tracing and metrics via Application Insights
+  (Entra-authenticated ingestion, local auth disabled).
+- Every state-changing operation emits an audit event: who, what, when, and outcome.
+- Errors return correlation IDs, never stack traces.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Simplicity and Maintainability
+- Prefer platform services over custom code; no new framework without a written
+  justification in `plan.md`.
+- YAGNI: build only what the current spec requires.
+- Public interfaces are versioned; breaking changes require a new major version.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### VII. Responsible AI (when the feature uses AI)
+- AI-generated output that affects a member MUST have human review or a documented
+  confidence threshold and fallback.
+- Prompts, model versions and evaluation results are version-controlled.
+- Content safety filters stay enabled; grounding data honors source permissions.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Additional Constraints
+- **Stack:** .NET 8 / C#, Azure Functions and Container Apps, Azure SQL, Bicep for IaC.
+- **Dependencies:** packages come only from approved internal feeds; no new
+  dependency without a license and vulnerability check.
+- **Infrastructure:** all resources are deployed by IaC through pipelines; no
+  portal changes in test or prod.
+- **Performance:** p95 API latency under 300 ms at expected peak load.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+1. `/speckit-specify` -> peer review of the spec by product owner and tech lead.
+2. `/speckit-clarify` resolves all open questions before planning.
+3. `/speckit-plan` MUST include a Constitution Check that lists each principle
+   as pass, fail or justified exception.
+4. `/speckit-tasks` -> `/speckit-analyze` for consistency -> `/speckit-implement`.
+5. Every PR needs one approving review, passing CI (build, tests, SAST, secret
+   scan, dependency scan) and a link to its spec.
+6. AI-generated code is held to the same review standard as human code.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+- This constitution overrides conflicting team conventions and agent defaults.
+- Exceptions MUST be recorded in `plan.md` under "Complexity Tracking", with the
+  reason and the simpler alternative that was rejected.
+- Amendments go through a PR approved by the tech lead and the security champion,
+  bump the version, and update dependent templates.
+- Compliance is reviewed at each release.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
