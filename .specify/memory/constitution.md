@@ -1,5 +1,12 @@
 # Member Services API Constitution
 
+**Amendment status: Proposed v2.3.0; pending PR adoption.** On 2026-11-13, the user
+explicitly approved this amendment in both the tech lead and security champion
+roles in this conversation. This records the user's approval, not a GitHub PR
+review or merge. The amendment still requires the PR process specified under
+Governance. Until adoption, v2.2.0's approved-internal-feeds-only requirement
+remains effective; the dependency policy below is proposed wording.
+
 ## Core Principles
 
 ### I. Spec Before Code
@@ -69,8 +76,14 @@ current behavior and structure of the project.*
   definitions belong in `infra/`; shared contracts and reusable libraries belong
   in `src/shared/`. Cross-stack contracts MUST be language-neutral or supported by
   generated language-specific clients.
-- **Dependencies:** packages come only from approved internal feeds; no new
-  dependency without a license and vulnerability check.
+- **Dependencies:** local npm operations MUST use the approved internal registry,
+  `https://packagefeedproxy.microsoft.io/npm/`. GitHub Actions MUST use
+  `https://registry.npmjs.org/` for public npm dependencies. Private dependencies
+  and non-npm packages MUST use approved internal feeds in every environment.
+  Registry selection MUST be explicit for each environment; feed access failures
+  MUST stop retrieval, not trigger fallback to another registry. Private package
+  names, credentials, and package contents MUST NOT be sent to the public registry.
+  No new dependency is permitted without a license and vulnerability check.
 - **Infrastructure:** all resources are deployed by IaC through pipelines; no
   portal changes in test or prod.
 - **Performance:** p95 API latency under 300 ms at expected peak load.
@@ -111,4 +124,4 @@ current behavior and structure of the project.*
   bump the version, and update dependent templates.
 - Compliance is reviewed at each release.
 
-**Version**: 2.2.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 2.3.0 (Proposed; effective version remains 2.2.0) | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
