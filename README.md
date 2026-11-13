@@ -42,6 +42,13 @@ plan and tasks**.
 Document the proposed architecture and decision rationale before human review;
 keep ADRs **Proposed** until the required approval is recorded.
 Exploration does not bypass spec approval or other constitutional gates.
+
+The current member-profile design is a proposal and is maintained in the
+[architecture overview](docs/architecture/member-profile-overview.md) and
+[design review](docs/architecture/design-review.md). Both documents separate
+confirmed requirements from open decisions; neither represents an approved or
+implemented system.
+
 Substantial new documentation starts with an approved outline; small corrections
 to existing documents do not require a separate outline.
 
