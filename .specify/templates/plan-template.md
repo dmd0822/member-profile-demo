@@ -4,7 +4,14 @@
 
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
+**GitHub Milestone**: [URL of the corresponding feature milestone, or an explicit synchronization blocker]
+
 **Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
+
+Create or reuse one repository milestone for this feature plan. Link the spec and
+plan in its description, record the milestone URL above, and keep it aligned with
+scope and progress changes. Check existing feature links before creating a
+milestone; report GitHub access failures instead of claiming synchronization.
 
 ## Summary
 
@@ -18,17 +25,19 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript (Angular frontend); C# / .NET 11 (backend).
+Record the Angular version and compatible toolchain for this feature.
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Primary Dependencies**: Angular; [approved backend dependencies for Azure Functions
+or Container Apps, as appropriate to the feature]
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Storage**: Azure SQL when persistence is required; otherwise N/A
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Testing**: [approved Angular and .NET 11 test tooling; tests live under tests/]
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Target Platform**: Browser frontend; Azure-hosted backend
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Project Type**: Angular web frontend and .NET 11 backend services
 
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
 
@@ -59,45 +68,29 @@ specs/[###-feature]/
 ### Source Code (repository root)
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
+  for this feature. Keep the frontend/backend boundaries below and include only
+  directories needed by the approved feature.
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
+  frontend/              # Angular / TypeScript
+    src/app/
+      components/        # Reusable UI components
+      pages/             # Routed member-facing views
+      services/          # API clients and frontend application services
+  backend/               # C# / .NET 11
+    Models/              # Backend domain and data models
+    Services/            # Business logic and application services
+    Api/                 # HTTP endpoints, request handling, and middleware
+  shared/                # Shared contracts and reusable libraries when required
 tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+  unit/                  # Isolated frontend and backend logic tests
+  integration/           # Service and data-access integration tests
+  contract/              # Public API request and response contract tests
+infra/                   # Bicep modules and deployment parameters
+docs/                    # Architecture docs, ADRs, and diagrams
+.github/workflows/       # Separate infrastructure and application CI/CD
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real

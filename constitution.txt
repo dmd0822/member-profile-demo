@@ -49,8 +49,26 @@ public exposure.*
 - Prompts, model versions and evaluation results are version-controlled.
 - Content safety filters stay enabled; grounding data honors source permissions.
 
+### VIII. Documentation Stays Current
+- Every change MUST include a review of affected documentation and README files.
+  Any documentation made inaccurate or incomplete by the change MUST be updated
+  in the same PR, not deferred to later work.
+- Updates MUST cover affected setup instructions, usage examples, API contracts,
+  configuration, architecture, project structure, and deployment guidance.
+- PRs MUST identify the documentation updated. If no documentation updates are
+  needed, the PR MUST explain why; unrelated documentation edits are not required.
+*Rationale: documentation is part of the deliverable and must describe the
+current behavior and structure of the project.*
+
 ## Additional Constraints
-- **Stack:** .NET 8 / C#, Azure Functions and Container Apps, Azure SQL, Bicep for IaC.
+- **Frontend:** Angular with TypeScript in `src/frontend/`. The Angular version
+  and compatible toolchain MUST be recorded in `plan.md`.
+- **Backend:** C# using .NET 11 in `src/backend/`, with Azure Functions and
+  Container Apps as appropriate to the approved design.
+- **Data and infrastructure:** Azure SQL and Bicep for IaC. Infrastructure
+  definitions belong in `infra/`; shared contracts and reusable libraries belong
+  in `src/shared/`. Cross-stack contracts MUST be language-neutral or supported by
+  generated language-specific clients.
 - **Dependencies:** packages come only from approved internal feeds; no new
   dependency without a license and vulnerability check.
 - **Infrastructure:** all resources are deployed by IaC through pipelines; no
@@ -67,6 +85,24 @@ public exposure.*
    scan, dependency scan) and a link to its spec.
 6. AI-generated code is held to the same review standard as human code.
 
+## GitHub Planning and Task Tracking
+- Each feature implementation plan (`plan.md`) MUST have a corresponding GitHub
+  milestone in this repository. The milestone description MUST link to the
+  feature's spec and plan; `plan.md` MUST record the milestone URL.
+- Each task in `tasks.md` MUST have a corresponding GitHub issue assigned to that
+  milestone. The issue MUST identify the feature and task ID, link to the spec and
+  plan, and describe the task scope, acceptance criteria, and dependencies.
+  `tasks.md` MUST record the issue URL for each task.
+- Plans and tasks remain the source of implementation detail. Changes to scope,
+  dependencies, or completion status MUST be reflected in the linked GitHub
+  milestone and issues as part of the same work.
+- Before creating tracking items, check existing feature links and task IDs and
+  reuse matching milestones and issues. Do not duplicate items when rerunning
+  planning or task generation.
+- If GitHub access or permissions prevent synchronization, report the blocker
+  and record pending tracking items. Do not invent URLs or claim synchronization
+  succeeded.
+
 ## Governance
 - This constitution overrides conflicting team conventions and agent defaults.
 - Exceptions MUST be recorded in `plan.md` under "Complexity Tracking", with the
@@ -75,4 +111,4 @@ public exposure.*
   bump the version, and update dependent templates.
 - Compliance is reviewed at each release.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 2.2.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
