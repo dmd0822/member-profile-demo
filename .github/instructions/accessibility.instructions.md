@@ -31,7 +31,8 @@ applyTo: "src/frontend/**/*.html,src/frontend/**/*.ts,src/frontend/**/*.css,src/
   unverified browser behavior and missing assistive technology explicitly.
 - Add acceptance-based regression tests for authorized fixes before changing
   behavior. Do not install accessibility libraries or automation tooling without
-  approval, internal-feed access, and license/vulnerability checks.
+  approval, access to the environment's constitution-approved package registry,
+  and license/vulnerability checks.
 
 Adapted from [Awesome Copilot's accessibility instructions](https://github.com/github/awesome-copilot/blob/222eba62d518c27317e917c92e3ec1a7e6729455/instructions/a11y.instructions.md).
 See [attribution and license](../AWESOME-COPILOT-NOTICE.md).

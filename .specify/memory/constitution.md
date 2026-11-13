@@ -1,11 +1,9 @@
 # Member Services API Constitution
 
-**Amendment status: Proposed v2.3.0; pending PR adoption.** On 2026-11-13, the user
-explicitly approved this amendment in both the tech lead and security champion
-roles in this conversation. This records the user's approval, not a GitHub PR
-review or merge. The amendment still requires the PR process specified under
-Governance. Until adoption, v2.2.0's approved-internal-feeds-only requirement
-remains effective; the dependency policy below is proposed wording.
+**Amendment status: Adopted v2.3.0.** The user explicitly approved the registry
+amendment as both tech lead and security champion on 2026-11-13.
+[Amendment PR #4](https://github.com/dmd0822/member-profile-demo/pull/4) merged on
+2026-11-13. The dependency policy below reflects that merged decision.
 
 ## Core Principles
 
@@ -124,4 +122,4 @@ current behavior and structure of the project.*
   bump the version, and update dependent templates.
 - Compliance is reviewed at each release.
 
-**Version**: 2.3.0 (Proposed; effective version remains 2.2.0) | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 2.3.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
