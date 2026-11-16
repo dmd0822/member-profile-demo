@@ -39,14 +39,14 @@ do not remove them or upgrade blindly without rerunning the audit and checks.
 
 ## Checks
 
-| Command                 | Purpose                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| `npm run lint`          | Run Markdown linting, formatting verification, and link checking.                       |
-| `npm run lint:markdown` | Check Markdown structure with markdownlint-cli2.                                        |
-| `npm run format:check`  | Verify supported files with Prettier without modifying them.                            |
-| `npm run lint:links`    | Check local and external Markdown links. Network access is required for external links. |
-| `npm run test:tooling`  | Run focused tests for local link resolution and anchor failures without network access. |
-| `npm run format`        | Explicitly rewrite supported files with Prettier during local development.              |
+| Command                 | Purpose                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `npm run lint`          | Run Markdown linting, formatting verification, and link checking.                            |
+| `npm run lint:markdown` | Check Markdown structure with markdownlint-cli2.                                             |
+| `npm run format:check`  | Verify supported files with Prettier without modifying them.                                 |
+| `npm run lint:links`    | Check local and external Markdown links. Network access is required for external links.      |
+| `npm run test:tooling`  | Test CI routing/package policy and link handling, including a synthetic local HTTP redirect. |
+| `npm run format`        | Explicitly rewrite supported files with Prettier during local development.                   |
 
 Use check-only commands in CI. Required application build/test, SAST, secret
 scanning, business coverage, public API contracts, and human approvals remain
@@ -103,9 +103,16 @@ an explicit audit after policy validation. Failures are not retried through
 another feed. Private/non-npm dependency support requires approved internal-feed
 access and is not activated on untrusted runners by this foundation.
 
-After hosted runs exist, a maintainer can configure the two stable result jobs
-as required checks. This change does not configure branch protection or enable
-deployment. Future CD needs an approved deployment spec, real projects/Bicep,
+The 2026-11-16 hosted scenario matrix verified both stable result jobs against
+the candidate link-check shutdown fix; it does not prove that fix is merged.
+The local approved-feed audit also completed successfully; later HTTP 429
+responses show that rate limits can recur. T007/T008 validation is fulfilled,
+while T006 awaits reviewed integration of the fix and evidence documentation.
+See the [validation evidence](../specs/001-separate-ci-pipelines/quickstart.md#current-evidence).
+A maintainer can configure required checks separately. Read-only inspection found
+`main` unprotected (`protected: false`); no branch-protection change is authorized
+by this milestone. Milestone 1 remains open, and deployment is not enabled.
+Future CD needs an approved deployment spec, real projects/Bicep,
 targets, environments, least-privilege identities, required validation/security
 checks, and environment approvals. No deployment route activates merely because
 project files appear. See the [validation guide](../specs/001-separate-ci-pipelines/quickstart.md).
@@ -120,6 +127,14 @@ The link-check wrapper uses the linter's shared file globs and exclusions and
 Node's built-in glob support. It also checks hidden `.github` documentation,
 resolves local links from each document's directory, and returns a failing exit
 code for broken links or request errors.
+
+The candidate shutdown fix destroys Node's HTTP and HTTPS global agents in a
+CLI-only `finally` block after awaiting the link results. This releases sockets
+retained by redirects so the process can exit naturally after completed checks.
+It preserves errors and exit codes: it does not force `process.exit`, ignore
+links, or change timeouts or link policy. The synthetic local-HTTP regression
+failed with `ETIMEDOUT` after five seconds before the fix despite reporting zero
+failed links, then passed with the fix. Final reviewed integration is pending.
 
 ## Scope and conventions
 

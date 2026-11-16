@@ -143,8 +143,12 @@ when application projects exist.
 read-only workflows. Both run for pull requests, pushes to `main`, and manual
 validation. No workflow-level path filters strand required checks on docs-only
 changes. Their stable job names are **Application CI result** and
-**Infrastructure CI result**; a maintainer can require these checks after
-observing their first hosted runs. Branch protections are not configured here.
+**Infrastructure CI result**. Both names and the hosted scenario matrix were
+verified on 2026-11-16 against the candidate link-check shutdown fix. T007 hosted
+validation and T008 local approved-feed audit are fulfilled; T006 awaits reviewed
+integration of that fix and its evidence documentation. Milestone 1 remains open.
+A maintainer can configure required checks separately; read-only inspection found
+`main` unprotected (`protected: false`). No protection changes are authorized here.
 
 Application CI restores the reviewed public tooling tree, runs repository lint
 and tooling tests, and audits public dependencies only when `src/`, `tests/unit/`,
@@ -231,7 +235,7 @@ The current feature backlog is organized as follows:
 
 | Feature                          | Plan and tasks                                                                                     | GitHub milestone                                                               | Delivery boundary                                                                             |
 | -------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| 001 Separate CI foundation       | [Plan](specs/001-separate-ci-pipelines/plan.md), [tasks](specs/001-separate-ci-pipelines/tasks.md) | [CI foundation](https://github.com/dmd0822/member-profile-demo/milestone/1)    | Existing implementation; hosted validation and approved-feed audit work remain open           |
+| 001 Separate CI foundation       | [Plan](specs/001-separate-ci-pipelines/plan.md), [tasks](specs/001-separate-ci-pipelines/tasks.md) | [CI foundation](https://github.com/dmd0822/member-profile-demo/milestone/1)    | T007/T008 validation verified; T006 awaits reviewed fix/evidence integration; milestone open  |
 | 003 Initial application projects | [Plan](specs/003-initial-app-projects/plan.md), [tasks](specs/003-initial-app-projects/tasks.md)   | [Initial projects](https://github.com/dmd0822/member-profile-demo/milestone/2) | Proposed two-project foundation, external tests, independent builds and truthful CI           |
 | 002 Member profile demo          | [Plan](specs/002-member-profile-demo/plan.md), [tasks](specs/002-member-profile-demo/tasks.md)     | [Member demo](https://github.com/dmd0822/member-profile-demo/milestone/3)      | Complete eight-story synthetic demo after the foundation and required design/security reviews |
 

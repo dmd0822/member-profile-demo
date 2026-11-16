@@ -1,4 +1,6 @@
 import { globSync, readFileSync } from "node:fs";
+import { globalAgent as httpAgent } from "node:http";
+import { globalAgent as httpsAgent } from "node:https";
 import { dirname, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
@@ -58,5 +60,11 @@ if (
   process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
-  process.exitCode = await main();
+  try {
+    process.exitCode = await main();
+  } finally {
+    // Redirect responses can retain sockets after all link results are reported.
+    httpAgent.destroy();
+    httpsAgent.destroy();
+  }
 }
