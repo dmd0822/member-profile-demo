@@ -6,9 +6,15 @@
 
 **GitHub Milestone**: <https://github.com/dmd0822/member-profile-demo/milestone/1>
 
-Tracking verified read-only on 2026-11-16: reuse milestone 1 and the existing
-T001–T009 issues in [tasks](tasks.md). T006/T007/T008 remain open; the other
-tasks are closed. Merged artifact references:
+Current tracking on 2026-11-16: reuse milestone 1 and the existing T001–T009
+issues in [tasks](tasks.md). T007 hosted validation and T008 local approved-feed
+audit are verified and fulfilled. T006 remains open pending final reviewed
+integration of the link-check shutdown fix and evidence documentation, with one
+approving review and passing CI before merge. Milestone 1 is not closed.
+The last read-only issue inspection showed T006/T007/T008 open and the other
+tasks closed; the parent will synchronize issue statuses after these updates.
+See [current evidence](quickstart.md#current-evidence); the design below is unchanged.
+Merged artifact references:
 [spec on main](https://github.com/dmd0822/member-profile-demo/blob/main/specs/001-separate-ci-pipelines/spec.md)
 and [plan on main](https://github.com/dmd0822/member-profile-demo/blob/main/specs/001-separate-ci-pipelines/plan.md).
 No GitHub changes were made by this documentation update.
