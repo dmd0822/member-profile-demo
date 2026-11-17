@@ -21,6 +21,7 @@ test("loads shared scope after formatting and includes hidden project documentat
     files.every(
       (file) =>
         !file.startsWith("node_modules/") &&
+        !file.includes("/node_modules/") &&
         !file.startsWith(".specify/") &&
         !file.startsWith(".github/skills/speckit-"),
     ),

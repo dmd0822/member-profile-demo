@@ -2,16 +2,17 @@
 
 **Date**: 2026-11-16
 
-**Status**: Proposed technical selections for [003](spec.md), not accepted
-architecture or authorization to implement. Audience: contributors and human
-design reviewers. This explanation supports the [plan](plan.md); it is not an
-additional task backlog.
+**Status**: The user approved the project/tooling design, authorized scoped
+implementation, and confirmed T001 review completion on 2026-11-16. Audience:
+contributors and human reviewers. This explanation supports the [plan](plan.md);
+it is not an additional task backlog.
 
 ## Evidence and clarification assessment
 
-The spec records user PO/tech lead approval for planning only. The constitution
-v2.3.0, README project layout, repository instructions, documentation guidance,
-and existing application CI are the governing evidence.
+The spec records the user's PO/tech lead planning and design approvals and
+scoped implementation authorization. The constitution v2.3.0, README project
+layout, repository instructions, documentation guidance, and existing
+application CI are the governing evidence.
 
 Read-only `/speckit-clarify` assessment asked and answered **zero** questions.
 No critical ambiguities detected worth formal clarification. The spec/checklist
@@ -37,16 +38,17 @@ they are not permission to override a spec constraint.
 
 ## Decision 1: Compatible Angular planning baseline
 
-**Decision (proposed)**: Angular 22.x with matching Angular CLI 22.x,
-Node.js >=24.15.0 <25, TypeScript >=6.0.0 <6.1.0, and RxJS 7.8.x.
+**Decision (approved for implementation)**: Angular 22.2.5 with matching
+Angular CLI/build 22.2.6, Node.js 24.22.3, TypeScript 6.0.3, and RxJS 7.8.2.
 
 **Rationale**: The official compatibility table retrieved on 2026-11-16 lists
 Angular 22 with Node `^22.22.3 || ^24.15.0 || ^26.0.0`,
 TypeScript `>=6.0.0 <6.1.0`, and RxJS `^6.5.3 || ^7.4.0`.
-The proposed intersection is compatible with that published matrix.
-The same reference notes Angular and CLI major versions are synchronized
-after v9. Choosing one supported Node major avoids an unconstrained
-“24.15+” that accidentally permits incompatible future majors.
+The pinned versions are compatible with that published matrix. The same
+reference notes Angular and CLI major versions are synchronized after v9.
+Node.js 24.22.3 is within the reviewed compatible 24.x range and avoids an
+unconstrained “24.15+” that accidentally permits incompatible future majors.
+Its official Windows x64 archive checksum was verified before local use.
 
 **Alternatives considered**:
 
@@ -58,17 +60,16 @@ after v9. Choosing one supported Node major avoids an unconstrained
 - Reuse root tooling's Node >=22.17 declaration as the application contract:
   rejected because it permits versions outside Angular 22's matrix.
 
-**Review/verification gate**: Exact Angular/CLI/build, TypeScript, RxJS, Node,
-and testing patches must be verified together, pinned, and checked for license
-and vulnerabilities before packages are introduced. A compatibility matrix is
-not a vulnerability report or proof a package exists on an approved feed.
-No new package/version was retrieved or installed during planning.
+**Review/verification gate**: The user confirmed the exact pins and required
+dependency/security reviews complete on 2026-11-16. The final lock still must
+be validated against this reviewed inventory and audited through the approved
+internal feed before package installation.
 
 Official source: [Angular version compatibility](https://angular.dev/reference/versions).
 
 ## Decision 2: Host-neutral backend foundation
 
-**Decision (proposed)**: One `Microsoft.NET.Sdk` class-library project targeting
+**Decision (approved for implementation)**: One `Microsoft.NET.Sdk` class-library project targeting
 `net11.0` under `src/backend/`, with future `Api/`, `Services/`, and `Models/`
 responsibility locations. No sample business class, server, endpoint, database
 context, Functions worker, container, or extra application runtime.
@@ -92,18 +93,16 @@ future hosting needs will require no project changes.
 - Folder-only backend: simplest on disk but cannot satisfy independent build
   and test outcomes.
 
-**Review/verification gate**: Human review must accept the non-executable
-foundation as the intended initial backend shape; otherwise stop and clarify
-design rather than silently selecting a host. Choose and verify a full .NET 11
-SDK version, compatible language defaults/analyzers, and internal feed access
-before implementation. No SDK installation or compilation was attempted.
+**Review/verification gate**: The user approved the non-executable foundation
+and confirmed the full SDK pin 11.0.100 and internal-feed review. Compilation
+and exact source behavior still require executable validation.
 
 Official sources: [Target frameworks](https://learn.microsoft.com/en-us/dotnet/standard/frameworks)
 and [global.json](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json).
 
 ## Decision 3: Default testing tools with real foundation assertions
 
-**Decision (proposed)**: Use Angular CLI's default Vitest/jsdom integration
+**Decision (approved for implementation)**: Use Angular CLI's default Vitest/jsdom integration
 where compatible with external test placement; use the SDK MSTest template for
 backend foundation tests. Reuse Node's native runner for repository/CI-policy
 acceptance checks. All test code and test setup stay under `tests/`.
@@ -157,9 +156,10 @@ exclusion from production output before acceptance. Keep test-only setup and
 providers out of `src/`. If unsupported, stop for a reviewed compatible approach;
 do not colocate tests or introduce another builder automatically.
 
-Pin and review MSTest/runner/coverage components and .NET 11 compatibility
-before retrieval. New test tooling is proposed, not already approved by the
-spec. Native-runner checks should not become an alternative planning workflow.
+The user confirmed review of the proposed MSTest tooling and .NET 11
+compatibility. Verify exact external test discovery and execution before
+acceptance. Native-runner checks should not become an alternative planning
+workflow.
 
 Official sources: [Angular unit testing](https://angular.dev/guide/testing),
 [Angular test command](https://angular.dev/cli/test),
@@ -168,7 +168,7 @@ and [C# with MSTest](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-
 
 ## Decision 4: Separate dependency trees and fail-closed feeds
 
-**Decision (proposed)**: Retain the root package as repository tooling, add a
+**Decision (approved for implementation)**: Retain the root package as repository tooling, add a
 separate frontend manifest/portable lock only during authorized implementation,
 and explicitly validate that tree before hosted retrieval. Do not introduce npm
 workspaces. Configure approved internal non-npm sources before .NET retrieval.
@@ -191,9 +191,11 @@ or private through human review before populating a public inventory. Actions
 may retrieve only reviewed public npm identities from public npm. Local npm,
 private packages, and non-npm packages retain their required internal feeds.
 Unknown identity, inaccessible audit service, missing credentials, unacceptable
-license/vulnerability results, or feed failure blocks introduction. No approved
-NuGet feed URL or runner access was available as verified evidence; none is
-invented. Review any necessary package lifecycle script before enabling it.
+license/vulnerability results, or feed failure blocks introduction. The
+approved NuGet endpoint is
+`https://packagefeedproxy.microsoft.io/nuget/v3/index.json`; it will be the
+only source in repository configuration. Verify runner access before relying
+on CI restores. Review any necessary package lifecycle script before enabling it.
 
 Repository sources: [Constitution](../../.specify/memory/constitution.md),
 [dependency tooling](../../docs/development-tooling.md),
@@ -202,7 +204,7 @@ Repository sources: [Constitution](../../.specify/memory/constitution.md),
 
 ## Decision 5: Activate CI with projects, not after them
 
-**Decision (proposed)**: Extend the existing application gate in the same future
+**Decision (approved for implementation)**: Extend the existing application gate in the same future
 change as project introduction. Provide executable independent build/tests,
 truthful result aggregation, and regression tests; preserve separate
 infrastructure validation and no deployment.
@@ -221,10 +223,12 @@ deployment after builds: expressly excluded.
 activation; account for deletions/renames, shared/config/test changes, manual
 runs, and fail-closed revision comparison. Verify nonzero test discovery and
 failure propagation. Unknown/missing/blocked tools or scans must never become
-“passed.” Keep read-only permissions and no cloud credentials. Add approved
+“passed.” Keep least privilege and no cloud credentials. Add approved
 language-specific validation when those files exist; review new linter packages
-under the same dependency rules. Required SAST and secret scanning remain
-unimplemented until actual approved executable checks supply evidence.
+under the same dependency rules. The current workflow configures CodeQL, but
+hosted analysis and enforcement, secret scanning, and push protection remain
+unverified; the security gate stays blocked pending repository-admin
+verification and hosted CI on this branch.
 
 Repository sources: [Application workflow](../../.github/workflows/application-ci.yml),
 [infrastructure workflow](../../.github/workflows/infrastructure-ci.yml),
@@ -265,10 +269,63 @@ member data, credentials, or private package identities were submitted.
 These sources support the claims above but are mutable and do not replace
 review of exact pinned releases.
 
-No application scaffolding, package download/install, compilation, test runner
-compatibility experiment, license/vulnerability scan, hosted CI run, browser
-test, deployment, or performance measurement occurred. Source retrieval is not
-implementation validation. Exact version approval, external Angular test
-discovery, internal non-npm feed access, and human design/security reviews remain
-explicit gates. Milestone and task issue links are recorded in the companion
-plan and task backlog; no implementation completion is implied.
+On 2026-11-16, the user approved the proposed baseline for validation and
+approved the preconfigured internal NuGet source. Both internal npm and NuGet
+service endpoints returned HTTP 200. The installed .NET SDK is 11.0.100 and
+reports up to date, while the installed Node.js 26.13.0 is outside the
+reviewed 24.x range. The NuGet source is
+`https://packagefeedproxy.microsoft.io/nuget/v3/index.json`; CI runner access
+has not yet been validated.
+
+The internal NuGet search lists MSTest.TestFramework and MSTest.TestAdapter
+4.5.3. Their registration metadata reports MIT licensing, and the internal
+vulnerability index (updated 2026-11-14) contains no direct advisory entries
+for either package ID. The SDK template dry-run identified the expected project
+files but not package references. These package metadata checks do not establish
+the template's exact dependency set or evaluate transitive packages; no NuGet
+restore or package download was performed.
+
+A disposable lock-only npm resolution through the approved internal feed
+completed for candidate Angular 22.2.5, CLI/build 22.2.6, compiler-cli 22.2.5,
+TypeScript 6.0.3, RxJS 7.8.2, Vitest 4.1.12, jsdom 31.0.0, tslib 2.9.1, and
+zone.js 0.16.3. The subsequent `npm audit --audit-level=high` exited 0 and
+reported zero vulnerabilities for that candidate graph. No package tarballs
+were downloaded, and the temporary files were removed. Metadata checked for
+`@angular/core`, `@angular/cli`, `@angular/build`, `@angular/compiler-cli`,
+TypeScript, RxJS, Vitest, jsdom, tslib, and zone.js reported MIT for the Angular,
+Vitest, jsdom, and zone.js packages, Apache-2.0 for TypeScript and RxJS, and
+0BSD for tslib. This is not a reviewed license inventory for every package in
+the lock. These candidates and results do not replace review of the final
+manifest/lock or the additional linter and scanner dependencies.
+
+At design time, no application scaffolding, application dependency manifests,
+NuGet restore, compilation, external-test discovery, hosted CI run, browser
+test, deployment, or performance measurement had occurred. Since then, scoped
+implementation has added the Angular and host-neutral .NET projects, external
+tests, and application CI commands. The Angular ESLint flat config is required
+by the helper, which invokes frontend lint. Its nested lock is checked against
+`.github/ci/public-npm-packages.json`, with a `minimatch` 11.0.1 override scoped
+to `@typescript-eslint/typescript-estree`.
+
+The tooling suite passed 23/23 tests; the foundation suite passed 8/8. Angular
+lint/build/test passed locally with one test file and one test. Backend
+formatting verification and tests passed with three tests. The NuGet
+vulnerability command returned a successful machine-readable report with no
+vulnerable-package entries. A prior isolated internal npm audit reported zero
+vulnerabilities, but the latest integrated run stopped when the approved
+internal feed's audit endpoint returned HTTP 429; that run is blocked and not a
+full pass. Do not switch local dependency auditing to public npm.
+
+The workflow configures CodeQL using `github/codeql-action` v3.39.3 at commit
+`9418214df1f2c4b8128c770156c409013b07d6b9`, analyzing
+`javascript-typescript` and `csharp` with `build-mode: none` and
+`security-extended`. This is configuration evidence only. Hosted analysis,
+required-result enforcement, secret scanning, and push protection remain
+unverified; settings endpoints were inaccessible or returned 404, and `gh`
+lacks `admin:repo_hook` scope for CodeQL setup. The security gate remains blocked pending repository-admin verification and
+hosted CI on this branch. Markdown lint, formatting, and link checking passed
+locally; link checking found zero failed links across 44 Markdown files. No
+hosted CI run, deployment, business logic, or API performance measurement
+occurred. Deployment remains disabled. T001 review approval remains the user's
+explicit 2026-11-16 confirmation described above; these implementation checks
+do not expand that approval or the feature scope.

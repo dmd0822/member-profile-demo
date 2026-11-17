@@ -1,0 +1,12 @@
+{
+  "extends": "../../../src/frontend/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@angular/core/testing": [
+        "../../../src/frontend/node_modules/@angular/core/types/testing.d.ts"
+      ],
+      "vitest": ["../../../src/frontend/node_modules/vitest/dist/index.d.ts"]
+    }
+  },
+  "include": ["../../../src/frontend/src/**/*.d.ts", "**/*.spec.ts"]
+}

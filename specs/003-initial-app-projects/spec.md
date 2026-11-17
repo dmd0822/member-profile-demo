@@ -4,9 +4,9 @@
 
 **Created**: 2026-11-16
 
-**Status**: Approved for planning by the user as product owner and tech lead on 2026-11-16; design and security review pending
+**Status**: Spec and proposed project design approved by the user as product owner and tech lead on 2026-11-16. The user confirmed T001 review completion; implementation is authorized.
 
-**Approval scope**: On 2026-11-16, the user explicitly selected: "I am acting as product owner and tech lead and approve both specs for planning". This covers 002 Member Profile Demo and 003 Initial Application Projects for planning only; it does not authorize implementation or deployment or approve the proposed design.
+**Approval scope**: The initial 2026-11-16 approval, "I am acting as product owner and tech lead and approve both specs for planning", covers planning for 002 Member Profile Demo and 003 Initial Application Projects. The user later approved the proposed 003 project/toolchain design, requested implementation, and explicitly confirmed T001's required reviews complete, including reviewed package/SDK pins and feed configuration. This authorizes scoped implementation; it does not authorize deployment or expand the approved feature scope.
 
 **Input**: User description: "Create a spec for the initial application set, how the source code will be structure. Initial front end and backend projects"
 
@@ -165,11 +165,10 @@ repository layout.
 - API hosting, frontend hosting, identity-provider configuration, database
   implementation details, and deployment targets remain undecided as recorded
   in the [architecture design review](../../docs/architecture/design-review.md).
-- Product owner and tech lead specification approval for planning was recorded
-  on 2026-11-16 above. Design and applicable security, privacy, accessibility,
-  and architecture reviews remain pending under the constitution and affected
-  feature scope. Planning approval does not authorize implementation or
-  deployment or select the open hosting and identity designs.
+- Product owner and tech lead specification approval for planning, design
+  approval, implementation authorization, and confirmation that T001's required
+  reviews are complete were recorded on 2026-11-16 above. Deployment and the
+  separate demo's hosting and identity designs remain unapproved.
 
 **Out of scope**: Member-facing or staff-facing application behavior; selecting
 hosting services, frameworks beyond the constitutional stack, or API contracts;
