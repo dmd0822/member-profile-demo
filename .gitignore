@@ -218,5 +218,17 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# Node.js and Angular
+node_modules/
+.angular/
+coverage/
+*.log
+.env*
+
+# .NET
+bin/
+obj/
+TestResults/
+
 # Streamlit
 .streamlit/secrets.toml

@@ -1,6 +1,6 @@
 # Implementation Plan: Initial Application Projects
 
-**Branch**: `dave-microsoft-spec-project-planning` (assigned checkout) | **Date**: 2026-11-16 | **Spec**: [Initial Application Projects](spec.md)
+**Branch**: `dave-microsoft-milestone-2` (assigned checkout) | **Date**: 2026-11-16 | **Spec**: [Initial Application Projects](spec.md)
 
 **Input**: Feature specification from `specs/003-initial-app-projects/spec.md`.
 Explicit Spec Kit target: `003-initial-app-projects`; setup reports the feature
@@ -10,39 +10,57 @@ identifier as its branch, not the physical checkout branch above.
 The milestone links the spec, plan, and [task backlog](tasks.md). Each task has a
 corresponding issue; implementation completion remains outstanding.
 
-**Status**: Proposed design artifacts, not implementation-ready. The user acting
-as product owner and tech lead approved the spec for planning on 2026-11-16.
-That approval does not approve the design, new test tooling, dependencies,
-hosting, implementation, or deployment. The linked backlog records task
-tracking. No application files or packages are introduced by this plan.
+**Status**: The user acting as product owner and tech lead approved the proposed
+project/tooling design and authorized scoped implementation on 2026-11-16.
+T001 reviews are complete by explicit user confirmation. The Angular and .NET
+foundations, external tests, and build/test CI implementation are in the
+worktree. Angular ESLint, CodeQL workflow configuration, dependency checks, and
+.NET formatting checks are implemented. The tooling suite passed 23/23, the
+foundation suite 8/8, frontend lint/build/test passed (one test file, one test),
+and backend formatting/tests passed (three tests). The NuGet vulnerability
+command returned a successful machine-readable report with no vulnerable
+packages. A prior isolated internal npm audit reported zero vulnerabilities,
+but the latest integrated run stopped at HTTP 429 from the approved feed's audit
+endpoint. Hosted CI and repository-admin security settings remain unverified;
+the security gate is blocked pending admin verification and hosted CI on this
+branch. Deployment remains disabled.
 
 ## Summary
 
 Establish one Angular/TypeScript frontend project and one C#/.NET 11 backend
 foundation with independent builds and meaningful foundation tests. Preserve
 the repository's source, test, infrastructure, and documentation boundaries.
-Activate applicable application CI in the same future implementation change;
-the existing CI deliberately rejects domain files without executable validation.
+Applicable application CI now runs independent builds/tests, dependency checks,
+Angular lint, and .NET formatting verification. The workflow also configures a
+CodeQL SAST job. Application-source changes remain blocked pending
+repository-admin verification of required CodeQL enforcement, secret scanning,
+and push protection, plus hosted CI on this branch.
 
-Recommend Angular/CLI 22, Node.js 24.15.0 or later **24.x**, TypeScript 6.0.x,
-and RxJS 7.8.x as the compatible planning baseline. Recommend a host-neutral
-.NET 11 class-library project as the backend foundation, not a running API.
-These are bounded proposals requiring human design review. No Functions,
+The approved pins are Angular 22.2.5, Angular CLI/build 22.2.6,
+compiler-cli 22.2.5, Node.js 24.22.3, TypeScript 6.0.3, RxJS 7.8.2,
+Vitest 4.1.12, jsdom 31.0.0, tslib 2.9.1, zone.js 0.16.3, and .NET SDK
+11.0.100. The backend targets `net11.0`; MSTest framework/adapter are pinned
+to 4.5.3. External test discovery and execution pass locally. The frontend npm
+audit in the latest integrated run is blocked by an internal-feed HTTP 429; an
+earlier isolated npm audit reported zero vulnerabilities. The local NuGet
+vulnerability command returned a successful machine-readable report with no
+vulnerable-package entries.
+No Functions,
 Container Apps, frontend hosting, business endpoint, identity flow, database
 access, shared library, audit worker, infrastructure, or deployment is selected.
 The proposed demo architecture remains separate and unapproved.
 
 See [research](research.md) for evidence, alternatives, and review gates, and
-the [quickstart](quickstart.md) for planned future validation entrypoints.
+the [quickstart](quickstart.md) for implemented validation entrypoints and
+current limitations.
 
 ## Technical Context
 
-**Language/Version**: Angular 22.x / matching CLI 22.x; TypeScript 6.0.x;
-Node.js >=24.15.0 <25; RxJS 7.8.x. Backend C# with the approved .NET 11 SDK's
-compatible default language version and `net11.0`, not a floating `latest`.
-Exact package patches and full SDK version remain package-introduction gates,
-not claims of tested pins. Record them in manifests, portable locks, and
-`global.json` before any authorized implementation retrieval.
+**Language/Version**: Angular 22.2.5 / matching CLI and build 22.2.6;
+TypeScript 6.0.3; Node.js 24.22.3; RxJS 7.8.2. Backend C# targets `net11.0`
+with .NET SDK 11.0.100 and its compatible default language version. The SDK is
+pinned in root `global.json`; the frontend lock passed the public-package
+inventory and portable-lock checks.
 
 **Primary Dependencies**: Angular and its matching CLI/build tooling. Proposed
 Angular-default Vitest/jsdom; proposed .NET SDK MSTest template tooling.
@@ -54,12 +72,11 @@ source, and compatibility review before introduction.
 **Storage**: N/A; no persistence or data access. Azure SQL remains the
 constitutional constraint for later approved persistence work.
 
-**Testing**: Existing Node native test runner for repository foundation and
-CI-policy acceptance tests; proposed Angular CLI unit-test builder with
-Vitest/jsdom for a neutral root-shell assertion; proposed MSTest project for
-backend project/assembly-boundary assertions. All test files and test setup
-remain under `tests/`. The pinned CLI must demonstrate discovery and execution
-outside `src/` before this design is accepted for implementation. No empty,
+**Testing**: Node's native runner covers repository foundation and CI-policy
+acceptance tests; Angular CLI/Vitest/jsdom discovers the external neutral
+root-shell test; the MSTest project checks backend project/assembly boundaries.
+All test files and setup remain under `tests/`. The local Angular suite
+discovered one test and MSTest discovered three; both passed. No empty,
 always-true, or invented business tests; zero discovered required tests fail.
 
 **Target Platform**: Browser frontend; host-neutral .NET backend assembly.
@@ -94,12 +111,12 @@ that executable implementation checks or pending human reviews have passed.
 
 | Principle                            | Before Phase 0        | After Phase 1         | Evidence and implementation gate                                                                                                                                                                                                                                                                                                      |
 | ------------------------------------ | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| I. Spec Before Code                  | Pass                  | Pass                  | Spec records PO/tech lead planning approval; no open functional clarification markers. Design remains proposed. Parent must produce tasks and run analysis; explicit implementation authorization is still required.                                                                                                                  |
+| I. Spec Before Code                  | Pass                  | Pass                  | Spec records PO/tech lead planning approval, design approval, implementation authorization, and explicit T001 review completion on 2026-11-16; no open functional clarification markers.                                                                                                                                              |
 | II. Security and Identity by Default | Pass                  | Pass                  | No service, identity flow, credential, or resource created. Later services retain Entra ID, managed identity, Key Vault for unavoidable secrets, private data access, and resource-scoped least privilege. Do not expose an unauthenticated sample API. Security review applies before affected behavior is added.                    |
 | III. Data Protection and Privacy     | Pass                  | Pass                  | No member data, fixtures containing PII, persistence, logs, or external payloads. Future data classification, encryption at rest/TLS 1.2+, and approved US residency remain mandatory; no production readiness claimed.                                                                                                               |
 | IV. Test-First Quality               | Pass                  | Pass                  | Foundation acceptance tests fail before scaffolding/CI changes. Real shell/configuration assertions replace template placeholders. Business-logic coverage is N/A, not 100%; later business logic requires >=80% line coverage and every public endpoint requires contract tests.                                                     |
 | V. Observability and Auditability    | Pass                  | Pass                  | No state-changing business operation or running service exists. Do not add a telemetry resource/SDK merely for scaffolding. Application Insights structured logs/traces/metrics with Entra ingestion/local auth disabled, safe correlation IDs, and who/what/when/outcome audits remain prerequisites for later operational behavior. |
-| VI. Simplicity and Maintainability   | Pass                  | Pass                  | Exactly two application boundaries; no shared library, extra worker, service framework, or hosting selection. Proposed test-framework justification and alternatives are written here and in research; human review and dependency checks precede adoption. No public interface exists to version yet.                                |
+| VI. Simplicity and Maintainability   | Pass                  | Pass                  | Exactly two application boundaries; no shared library, extra worker, service framework, or hosting selection. Test-framework justification and alternatives are written here and in research; the user confirmed the required review complete. No public interface exists to version yet.                                             |
 | VII. Responsible AI                  | Pass (not applicable) | Pass (not applicable) | The application foundation uses no AI. AI-assisted authorship is not a member-facing AI capability. Future applicable AI use still requires review/fallback, versioned prompts/model/evaluations, enabled safety filters, and permission-aware grounding.                                                                             |
 | VIII. Documentation Stays Current    | Pass                  | Pass                  | README and development-tooling guidance were reviewed; README links the current feature backlog. Future project/CI implementation must update affected setup, structure, test, and configuration documentation in the same PR, not present these proposed commands as existing.                                                       |
 
@@ -113,24 +130,34 @@ Required CI and at least one approving PR review remain mandatory; no self-appro
 1. **Planning authority satisfied**: target spec is approved for planning.
    Functional clarification assessment asked zero questions; missing hosting
    and demo identity choices are explicitly excluded, not hidden ambiguities.
-2. **Design review pending**: humans must review the host-neutral backend shape,
-   Angular toolchain, test-framework justifications, external test discovery,
-   and CI/dependency design. No accepted ADR exists for these selections.
+2. **Design review approved**: the user acting as product owner and tech lead
+   approved the host-neutral backend shape, Angular toolchain, and test-framework
+   approach on 2026-11-16. External test discovery and execution pass locally;
+   CI dependency checks and the CodeQL workflow job are implemented, but the
+   latest integrated npm audit is rate-limited. Hosted CodeQL enforcement,
+   secret scanning, and push protection remain unverified; the security gate is
+   blocked pending repository-admin verification and hosted CI on this branch.
    The separate architect's demo review is not duplicated or presumed complete.
-3. **Package/toolchain introduction blocked pending checks**: choose exact
-   patches/full SDK; verify compatibility, approved internal non-npm feed
-   identity/access, and license/vulnerability results before retrieving or
-   introducing packages. Feed unavailability must stop the affected work.
+3. **Package/toolchain review recorded**: on 2026-11-16, the user confirmed
+   T001's required design, security, and dependency reviews complete, including
+   reviewed pins and feed configuration. The reproducible metadata checks are
+   summarized in [research](research.md); the user attestation is the approval
+   record for review evidence not reproduced in this workspace. Keep registry
+   selection explicit and fail closed. Use the reviewed Node.js 24.22.3 and
+   .NET SDK 11.0.100 pins rather than the host's Node 26.13.0.
 4. **Backlog gate**: review the generated [tasks](tasks.md), synchronized
-   milestone/issues, and consistency analysis before implementation. Neither
-   planning approval nor task generation authorizes implementation.
-5. **Implementation and PR gates remain**: explicit later authorization,
-   observed fail-first tests, applicable executable CI and security scans,
-   same-PR documentation, and required human review. No deployment route.
+   milestone/issues, and consistency analysis. T001 is complete by explicit
+   user confirmation; remaining tasks must follow their documented
+   dependencies.
+5. **Implementation and PR gates remain**: observed fail-first tests, complete
+   executable CI/security checks, same-PR documentation, and required human
+   review. The CodeQL job is configured, but hosted analysis and enforcement,
+   secret scanning, push protection, hosted CI on this branch, and an unblocked
+   latest frontend audit remain outstanding. No deployment route is authorized.
 
-The design is sufficiently bounded to document as a proposal; it is not
-reported as fully reviewed or ready to scaffold. Failure of an applicable
-gate stops that activity rather than being recorded as a passing check.
+The approved design and T001 review gate are recorded complete. Failure or
+absence of an applicable executable or toolchain check still stops that
+activity rather than being recorded as a passing check.
 
 ## Project Structure
 
@@ -142,7 +169,7 @@ specs/003-initial-app-projects/
   checklists/requirements.md # Existing; approval writer owns changes
   plan.md                    # This proposed design
   research.md                # Phase 0 decisions, sources, alternatives
-  quickstart.md              # Phase 1 future validation guide
+  quickstart.md              # Implemented validation guide and evidence
 ```
 
 No domain entities, persistence model, public API, or cross-stack contract is
@@ -153,7 +180,8 @@ separate task-generation workflow output, not a Phase 1 design artifact.
 
 ### Source Code (repository root)
 
-The following is a **future proposed layout**, not existing source:
+The following is the current implemented layout; the responsibility areas
+remain boundaries, not permission to add unapproved features:
 
 ```text
 src/
@@ -165,7 +193,7 @@ src/
       components/            # Reusable UI responsibility
       pages/                 # Routed-view responsibility; no member page yet
       services/              # Frontend-service responsibility; no API client yet
-  backend/                   # One host-neutral net11.0 foundation
+  backend/                    # One host-neutral net11.0 foundation
     MemberProfile.Backend.csproj
     Api/                     # Future HTTP-handling responsibility, no endpoint
     Services/                # Future business-service responsibility, no logic
@@ -177,9 +205,9 @@ tests/
     backend/
       MemberProfile.Backend.Tests.csproj
 .github/
-  scripts/ci-foundation.mjs  # Extend existing selection/readiness/execution
+  scripts/ci-foundation.mjs  # Select and run application checks
   workflows/
-    application-ci.yml       # Activate actual Angular/.NET checks
+    application-ci.yml       # Run read-only application checks
     infrastructure-ci.yml    # Preserve separate infrastructure gate
 ```
 
@@ -191,19 +219,23 @@ Do not create `src/shared/` without an approved reuse requirement, or `infra/`,
 `tests/integration/`, or `tests/contract/` without actual corresponding work.
 The latter locations remain reserved by FR-004–FR-006, not deleted conventions.
 Do not colocate Angular-generated tests under `src/`; configure discovery and
-TypeScript test inclusion for `tests/unit/frontend/`, validating relative
-paths against the pinned builder. A failure is a design blocker, not permission
-to weaken the layout or silently select another framework.
+TypeScript test inclusion for `tests/unit/frontend/`. The pinned builder
+discovered and executed the external suite locally. A future regression is a
+design blocker, not permission to weaken the layout or silently select another
+framework.
 
 ## Phase 0: Research Outcome
 
 [Research](research.md) resolves implementation-method unknowns into bounded
-proposals: compatible frontend versions, host-neutral backend, default test
-tooling with explicit review, separate dependency trees, fail-closed CI
-activation, and absence of domain contracts/data models. Exact patch approval,
-feed access, executable compatibility, and human design reviews remain
-explicit pre-introduction gates, not unresolved functional requirements.
-No application dependency was retrieved to conduct this research.
+decisions: compatible frontend versions, host-neutral backend, default test
+tooling, separate dependency trees, fail-closed CI activation, and absence of
+domain contracts/data models. Exact pins and human review were confirmed for
+T001. Implementation verified local test discovery and the portable frontend
+lock against the reviewed public package inventory. The latest integrated
+internal npm audit was rate-limited, despite an earlier isolated
+zero-vulnerability audit. The CodeQL workflow is configured, but admin
+verification of enforcement/secret controls and hosted CI on this branch remain
+outstanding. No implementation evidence expands the approved scope.
 
 ## Phase 1: Design and Validation
 
@@ -229,46 +261,49 @@ No application dependency was retrieved to conduct this research.
 
 ### Application CI activation
 
-Current evidence: `.github/scripts/ci-foundation.mjs` returns `implemented: false`
-from `readiness()` and rejects affected domain files. Application CI currently
-runs repository tooling only. Adding project files without changing this gate
-will fail as designed.
+Current implementation: `.github/scripts/ci-foundation.mjs` validates project
+files and the nested frontend lock before retrieval, then runs the Angular
+install/lint/audit/build/test sequence and the approved-feed .NET restore,
+vulnerability, formatting, build, and test checks. It requires nonzero test
+discovery and propagates command failures. The root test suite exercises
+selection, deletion/rename behavior, dependency policy, and failure handling.
+The Angular flat config is required, and the locked public package identities
+are validated against `.github/ci/public-npm-packages.json`; the narrowly scoped
+`minimatch` 11.0.1 override applies only to
+`@typescript-eslint/typescript-estree`.
 
-The future application change must provide frontend and backend build/test
-execution and update readiness/reporting in the same PR. Do not set an
-unconditional readiness flag or remove domain checks. Preserve the stable
-**Application CI result** and **Infrastructure CI result** names, read-only
-permissions, pinned Actions, no persisted checkout credentials, and no
-workflow-level path filters. Result aggregation must run and report failures,
-not mask failed or skipped required children.
+The application workflow uses the reviewed Node.js 24.22.3 and .NET SDK
+11.0.100 pins, pinned Actions, checkout credentials disabled, and no
+workflow-level path filters. Its workflow-level permission is `contents: read`;
+the CodeQL job additionally has `security-events: write`. Stable result names,
+fail-closed revision comparison, manual dispatch, deletion/rename handling,
+explicit registry selection, and separation from infrastructure CI are
+preserved. The app project's public package identities are checked before
+public npm retrieval; unknown identities or non-portable lock entries fail
+closed. Local package retrieval and audit use the approved internal npm feed;
+GitHub Actions uses public npm only for reviewed public package identities.
+NuGet configuration clears other sources and uses only the approved internal
+feed.
 
-Select dependent checks for source, shared assets if later present, matching
-tests, package/lock/build configuration, SDK pins, and CI changes. Retain
-fail-closed revision comparison, deletions/renames, manual dispatch validation,
-and explicit not-applicable reporting for unrelated changes. Unchanged
-infrastructure stays separate and no Bicep deployment is activated.
+The tooling suite passed 23/23, the foundation suite 8/8, and frontend lint,
+build, and test passed locally with one test file and one test. Backend
+formatting checks and three tests passed. The NuGet vulnerability command
+returned a successful machine-readable report with no vulnerable-package
+entries. A prior isolated internal npm audit reported zero vulnerabilities;
+the latest integrated run returned HTTP 429 from the approved feed's audit
+endpoint and is not a pass. No hosted CI run occurred, so CI runner access to
+internal NuGet and the hosted workflow's complete behavior remain unverified.
 
-Upgrade application CI's Node selection to an exact reviewed compatible 24.x
-patch and add a full reviewed .NET 11 SDK pin before execution; do not rely on
-the current generic Node 22 selection satisfying Angular 22.
-
-Before any frontend or root npm retrieval/audit on Actions, validate the
-corresponding manifest and lock against reviewed public identities and allowed
-sources. The root validator currently rejects npm workspaces; extend it to
-validate the frontend's separate tree explicitly with regression tests. Never
-send unknown/private identities to public npm to find out whether they exist.
-Keep integrity checks, portable locks without registry-resolved URLs, explicit
-environment registries, and the no-fallback policy. Do not blindly enable
-lifecycle scripts; review any required build-tool install behavior first.
-
-MSTest/NuGet and other non-npm dependencies require approved internal feeds on
-local machines and Actions. No internal NuGet source/access configuration was
-verified; do not invent one, use a public fallback, or expose secrets to
-untrusted pull requests. Missing feed capability blocks the backend check.
-Required SAST, secret scanning, dependency checks, and human reviews must be
-implemented/verified or reported blocked; existing tooling is not proof they
-have passed. No write permission, cloud login, image push, CD, or resource
-change belongs in this feature.
+The workflow configures CodeQL SAST with `github/codeql-action` v3.39.3 at
+commit `9418214df1f2c4b8128c770156c409013b07d6b9`, analyzing
+`javascript-typescript` and `csharp` with `build-mode: none` and
+`security-extended`. This is configuration evidence only. Hosted analysis,
+required-result enforcement, GitHub secret scanning, and push protection are
+unverified: settings endpoints were inaccessible or returned 404, and `gh`
+lacks the `admin:repo_hook` scope needed for CodeQL setup. The helper fails
+selected application-source changes pending repository-admin verification and
+hosted CI on this branch. Do not claim security controls are enabled, use an
+unapproved registry/scanner, or weaken the gate. Deployment remains disabled.
 
 ### Acceptance and success-criteria traceability
 

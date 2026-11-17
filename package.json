@@ -12,6 +12,7 @@
     "lint:markdown": "markdownlint-cli2",
     "lint:links": "node .github/scripts/check-markdown-links.mjs",
     "test:tooling": "node --test tests/unit/tooling/*.test.mjs",
+    "test:foundation": "node --test tests/unit/foundation/*.test.mjs",
     "format:check": "prettier --check .",
     "format": "prettier --write ."
   },

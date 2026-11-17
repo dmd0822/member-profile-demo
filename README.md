@@ -66,8 +66,11 @@ represents an approved or implemented system.
 The [initial demo specification](specs/002-member-profile-demo/spec.md) and
 [initial application projects specification](specs/003-initial-app-projects/spec.md)
 received product owner and tech lead approval for planning on 2026-11-16.
-Their technical designs remain proposed; planning does not authorize
-implementation, dependency introduction, infrastructure changes, or deployment.
+On 2026-11-16, the user also approved the initial-project design and authorized
+scoped implementation. The user subsequently confirmed T001's required design,
+security, and dependency reviews complete, including reviewed pins and feed
+configuration. The member-demo design remains proposed; infrastructure changes
+and deployment are not authorized.
 
 Substantial new documentation starts with an approved outline; small corrections
 to existing documents do not require a separate outline.
@@ -131,93 +134,121 @@ npm ci --ignore-scripts
 npm run lint
 ```
 
-`npm run lint` does not rewrite files; use `npm run format` for explicit local
-formatting. See [development tooling](docs/development-tooling.md) for individual
-checks, scope exclusions, feed access, and the language-specific linters to add
-when application projects exist.
+The root commands `npm run test:tooling`, `npm run test:foundation`,
+`npm run lint`, and `npm run format:check` cover repository tooling, foundation
+boundaries, Markdown, formatting, and links; `npm run format` rewrites supported
+files. They do not replace the Angular/.NET project commands or required security
+checks. See [development tooling](docs/development-tooling.md) for the actual
+project commands, feed selection, and check boundaries.
 
 ## CI foundation
 
 [Application CI](.github/workflows/application-ci.yml) and
-[Infrastructure CI](.github/workflows/infrastructure-ci.yml) are separate,
-read-only workflows. Both run for pull requests, pushes to `main`, and manual
-validation. No workflow-level path filters strand required checks on docs-only
-changes. Their stable job names are **Application CI result** and
-**Infrastructure CI result**. Both names and the hosted scenario matrix were
-verified on 2026-11-16 against the candidate link-check shutdown fix. T007 hosted
-validation and T008 local approved-feed audit are fulfilled; T006 awaits reviewed
-integration of that fix and its evidence documentation. Milestone 1 remains open.
+[Infrastructure CI](.github/workflows/infrastructure-ci.yml) are separate
+workflows with scoped permissions. The CodeQL job has `security-events: write`;
+the application validation job uses read-only repository access. Both workflows
+run for pull requests, pushes to `main`, and manual validation. No workflow-level
+path filters strand required checks on docs-only changes. Their stable job names are **Application CI result** and
+**Infrastructure CI result**. The hosted scenario matrix and T007/T008 evidence
+refer to the separate CI foundation feature (001), not a hosted run of the
+Angular/.NET application projects. For feature 003, no hosted CI run occurred;
+T006 in feature 001 still awaits reviewed integration of its link-check fix and
+evidence documentation. Milestone 1 remains open.
 A maintainer can configure required checks separately; read-only inspection found
 `main` unprotected (`protected: false`). No protection changes are authorized here.
 
-Application CI restores the reviewed public tooling tree, runs repository lint
-and tooling tests, and audits public dependencies only when `src/`, `tests/unit/`,
-or supporting build/dependency/CI configuration changes. Documentation-only and
-infrastructure-only changes receive a lightweight **not applicable** result
-without npm restore, lint/link checks, tests, or audit.
-Infrastructure CI independently reports Bicep-validation readiness. Missing
-Angular/.NET and Bicep checks are explicitly **not implemented**. Introducing
-domain files blocks the affected gate until approved executable validation is
-added; no application or infrastructure projects are scaffolded by this setup.
+For application changes, the helper selects Angular lint/build/test and .NET
+build/test checks, dependency vulnerability checks, and .NET formatting
+verification. Repository tooling checks and the public-tooling audit are
+selected for their configured path scope. The helper also verifies package identities before retrieval and
+uses the explicitly selected registry: the approved internal npm feed locally
+and public npm in GitHub Actions for reviewed public packages. Non-npm
+dependencies use the approved internal NuGet source. Feed failures do not fall
+back to another source.
 
-**CD is not enabled.** No cloud authentication, resource changes, or deployment
-jobs exist. Future build/test, SAST, secret scanning, coverage, contract checks,
-and deployment targets/identities/environment approvals remain prerequisites,
-not checks these foundation workflows have passed. See the
+The application workflow contains a CodeQL job pinned to
+`github/codeql-action` v3.39.3 (commit
+`9418214df1f2c4b8128c770156c409013b07d6b9`) for JavaScript/TypeScript and C#,
+using `build-mode: none` and `security-extended`. This is workflow
+configuration, not proof that hosted analysis or required-result enforcement
+is active. Repository-admin settings were inaccessible or returned 404, and no
+hosted CI run on this branch was verified. CodeQL enforcement, GitHub secret
+scanning, and push protection therefore remain **unverified**; the security
+gate is blocked pending repository-admin verification and hosted CI on this
+branch. Do not describe those controls as enabled.
+
+Local validation passed the tooling suite (23/23), foundation suite (8/8),
+Angular lint/build/test (one test file, one test), and backend format checks and
+tests (three tests). The NuGet vulnerability command returned a successful
+machine-readable report with no vulnerable-package entries. A prior isolated
+internal-feed npm audit reported zero vulnerabilities, but the latest
+integrated run was stopped when the approved internal feed returned HTTP 429
+from its audit endpoint. That latest run is not a full pass; do not switch the
+local audit to public npm. These are local results, not hosted CI results. No
+hosted CI run or deployment occurred.
+
+Infrastructure CI independently reports Bicep-validation readiness; Bicep
+validation is not implemented. **CD is not enabled.** No cloud authentication,
+resource changes, or deployment jobs exist. There is no business logic or public
+API in this foundation, so business-logic coverage is not applicable and
+public-endpoint contract tests do not yet apply. API latency and browser or
+accessibility conformance have not been measured. See the
 [approved scope](specs/001-separate-ci-pipelines/spec.md) and
 [validation guide](specs/001-separate-ci-pipelines/quickstart.md).
 
 ## Technology stack
 
-The planned frontend uses Angular with TypeScript. The planned backend uses
-C# and .NET 11, hosted on Azure Functions and Container Apps as appropriate
-to the approved design. Use Azure SQL for data and Bicep for infrastructure as code.
-Record the Angular version and compatible toolchain in the implementation plan.
+The initial foundation now contains an Angular 22/TypeScript frontend and a
+host-neutral .NET 11 backend class library. The frontend is a neutral shell; the
+backend has no API endpoints, business logic, persistence, or hosting runtime.
+The test projects are outside `src/`: Angular tests are under
+`tests/unit/frontend/`, and the external MSTest project under
+`tests/unit/backend/` contains three foundation-boundary tests. The production
+Angular build excludes tests. The broader member-profile design—including Azure
+hosting, Azure SQL, and Bicep—remains separate from this implemented foundation;
+no hosting choice or deployment is implied.
 
 ## Project structure
 
-Use the following layout as the member-services application is implemented.
-Directories are created when needed; this is not a list of existing components.
+The current foundation is intentionally small. The responsibility directories
+are ownership boundaries, not implemented member features:
 
 ```text
-src/                 Application code only
-  frontend/          Angular frontend (TypeScript)
-    src/app/
-      components/    Reusable UI components
-      pages/         Routed member-facing views
-      services/      API clients and frontend application services
-  backend/           .NET 11 backend (C#), member APIs, and Azure-hosted services
-    Models/          Backend domain and data models
-    Services/        Business logic and application services
-    Api/             HTTP endpoints, request handling, and middleware
-  shared/            Shared API contracts, member schemas, and reusable libraries
-tests/               Unit, integration, and public API contract tests
-  unit/              Isolated frontend and backend logic tests
-  integration/       Service and data-access integration tests
-  contract/          Public API request and response contract tests
-infra/               Bicep infrastructure as code, modules, and deployment parameters only
-docs/                Architecture docs, ADRs, architecture plans, and diagrams
-specs/               Spec Kit feature specs, implementation plans, tasks, and contracts
-.github/workflows/   Separate infrastructure and application CI/CD workflows
+src/
+  frontend/                           Angular workspace and neutral shell
+  backend/                            .NET 11 class library (no host or API)
+tests/unit/
+  frontend/                           Angular/Vitest tests, outside src/
+  backend/                            External MSTest foundation-boundary tests
+  foundation/                         Node-native layout/boundary tests
+  tooling/                            CI and repository-tooling tests
+docs/                                 General documentation
+specs/                                Feature specifications, plans, and tasks
+.github/workflows/                    Separate application and infrastructure CI
 ```
 
 Keep application code, infrastructure definitions, tests, and documentation in
 their respective directories. This project has no device or Raspberry Pi runtime
-layer. Add shared libraries only when an approved feature requires reuse.
-Keep cross-stack contracts language-neutral or generate language-specific clients;
-Angular must not directly depend on C# implementation libraries.
+layer. No shared library, integration/contract test project, Bicep project, or
+deployment exists in this foundation. Add them only when an approved feature
+requires them. Keep cross-stack contracts language-neutral or generate
+language-specific clients; Angular must not directly depend on C# implementation
+libraries.
 
 Spec Kit feature artifacts belong in `specs/<feature>/`, including `spec.md`,
 `plan.md`, `tasks.md`, and feature contracts. General architecture documentation
 belongs in `docs/`; Spec Kit configuration and the constitution remain in
 `.specify/`.
 
-Infrastructure and application CI/CD must use separate workflow files.
-Infrastructure workflows validate and deploy Bicep; application workflows build,
-test, and deploy the Angular frontend and .NET 11 backend. Scope triggers to
-relevant paths while accounting for shared code, tests, and build configuration.
-Preserve required checks and
-environment approvals, and avoid path filters that leave required checks pending.
+Keep infrastructure and application workflows separate. Application CI selects
+Angular lint/build/test, .NET build/test, dependency/format checks, and a
+configured CodeQL job for project changes. Application-source changes remain blocked until repository-admin
+verification confirms CodeQL enforcement, secret scanning, and push protection,
+and hosted CI on this branch is verified. Infrastructure validation and
+deployment are not implemented.
+Deployment workflows, cloud identities, targets, and environment approvals remain
+future prerequisites. Preserve required checks and avoid path filters that leave
+required checks pending.
 
 ## GitHub planning and task tracking
 
@@ -233,13 +264,14 @@ succeeded. See the constitution for the full tracking requirements.
 
 The current feature backlog is organized as follows:
 
-| Feature                          | Plan and tasks                                                                                     | GitHub milestone                                                               | Delivery boundary                                                                             |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| 001 Separate CI foundation       | [Plan](specs/001-separate-ci-pipelines/plan.md), [tasks](specs/001-separate-ci-pipelines/tasks.md) | [CI foundation](https://github.com/dmd0822/member-profile-demo/milestone/1)    | T007/T008 validation verified; T006 awaits reviewed fix/evidence integration; milestone open  |
-| 003 Initial application projects | [Plan](specs/003-initial-app-projects/plan.md), [tasks](specs/003-initial-app-projects/tasks.md)   | [Initial projects](https://github.com/dmd0822/member-profile-demo/milestone/2) | Proposed two-project foundation, external tests, independent builds and truthful CI           |
-| 002 Member profile demo          | [Plan](specs/002-member-profile-demo/plan.md), [tasks](specs/002-member-profile-demo/tasks.md)     | [Member demo](https://github.com/dmd0822/member-profile-demo/milestone/3)      | Complete eight-story synthetic demo after the foundation and required design/security reviews |
+| Feature                          | Plan and tasks                                                                                     | GitHub milestone                                                               | Delivery boundary                                                                                                                                                       |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001 Separate CI foundation       | [Plan](specs/001-separate-ci-pipelines/plan.md), [tasks](specs/001-separate-ci-pipelines/tasks.md) | [CI foundation](https://github.com/dmd0822/member-profile-demo/milestone/1)    | T007/T008 validation verified; T006 awaits reviewed fix/evidence integration; milestone open                                                                            |
+| 003 Initial application projects | [Plan](specs/003-initial-app-projects/plan.md), [tasks](specs/003-initial-app-projects/tasks.md)   | [Initial projects](https://github.com/dmd0822/member-profile-demo/milestone/2) | Local tooling/foundation/frontend/backend checks pass; latest npm audit blocked by HTTP 429; CodeQL enforcement and secret controls unverified; no hosted CI/deployment |
+| 002 Member profile demo          | [Plan](specs/002-member-profile-demo/plan.md), [tasks](specs/002-member-profile-demo/tasks.md)     | [Member demo](https://github.com/dmd0822/member-profile-demo/milestone/3)      | Complete eight-story synthetic demo after the foundation and required design/security reviews                                                                           |
 
 Plan 003 before implementing dependent 002 work; do not duplicate initial
 scaffolding in the demo. Each task links its issue and states its prerequisites.
-All new implementation tasks remain open, with human review gates explicit.
-No due dates, deployment schedule, or production-readiness claim is implied.
+Remaining implementation tasks stay open, with applicable human review gates
+explicit. No due dates, deployment schedule, or production-readiness claim is
+implied.

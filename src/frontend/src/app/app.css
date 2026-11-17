@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+main {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  color: #1f2937;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+
+p {
+  color: #374151;
+  line-height: 1.6;
+  max-width: 65ch;
+}
