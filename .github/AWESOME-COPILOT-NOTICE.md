@@ -45,6 +45,29 @@ coverage and runtime verification. API discovery also covers Minimal APIs and
 Azure Functions when present. The optional coverage-map script is vendored
 unchanged; its limitations are documented in the adapted test-gap skill.
 
+## QA adaptations at revision 1683f50e94c9fd489191f73d7c8f7e2bd871bd0c
+
+The following additions are adapted separately from
+[github/awesome-copilot](https://github.com/github/awesome-copilot) at revision
+`1683f50e94c9fd489191f73d7c8f7e2bd871bd0c`; the earlier adaptations retain the
+revision recorded above:
+
+| Local file                        | Upstream source                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `agents/test-strategist.agent.md` | [QA agent](https://github.com/github/awesome-copilot/blob/1683f50e94c9fd489191f73d7c8f7e2bd871bd0c/agents/qa-subagent.agent.md)                                                     |
+| `instructions/qa.instructions.md` | [QA Engineering Best Practices](https://github.com/github/awesome-copilot/blob/1683f50e94c9fd489191f73d7c8f7e2bd871bd0c/instructions/qa-engineering-best-practices.instructions.md) |
+
+These adaptations make the agent planning-only by default, remove client-specific
+tool lists, and narrow QA instructions to tests and feature test plans. They
+preserve constitutional test-first and coverage requirements, Spec Kit authority,
+human approval gates, synthetic-data privacy, and truthful execution evidence.
+Risk-based levels replace fixed pyramid ratios; real authorized isolated
+integration boundaries complement unit mocks. Load and security execution require
+separate authorization. Playwright, AI Team QA, and Quality Playbook are not added.
+
+The [upstream LICENSE at this revision](https://github.com/github/awesome-copilot/blob/1683f50e94c9fd489191f73d7c8f7e2bd871bd0c/LICENSE)
+was inspected and contains the same MIT notice preserved below.
+
 ## Upstream license
 
 MIT License

@@ -89,15 +89,17 @@ The toolkit adds no application dependencies or deployment automation.
 
 The initial implementation/review shortlist is also included:
 
-| Resource                                                                             | Purpose                                                                             |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| [Member Services C# Expert](.github/agents/csharp-expert.agent.md)                   | Approved .NET 11 backend work with test-first development and minimal abstractions. |
-| [Member Services Accessibility Expert](.github/agents/accessibility-expert.agent.md) | Angular forms, keyboard navigation, focus, semantics, and accessibility review.     |
-| [API Breaking Change Detector](.github/skills/api-breaking-change-detector/SKILL.md) | Read-only comparison of C# endpoints and DTOs against Angular/TypeScript consumers. |
-| [Test Gap Audit](.github/skills/test-gap-audit/SKILL.md)                             | Read-only review of missing or weak behavioral tests and contract coverage.         |
-| [C# instructions](.github/instructions/csharp.instructions.md)                       | Backend language, async, error handling, and test conventions.                      |
-| [Security instructions](.github/instructions/security.instructions.md)               | Identity, member ownership, safe input handling, and privacy.                       |
-| [Accessibility instructions](.github/instructions/accessibility.instructions.md)     | Scoped Angular accessibility guidance.                                              |
+| Resource                                                                             | Purpose                                                                                      |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| [Member Services C# Expert](.github/agents/csharp-expert.agent.md)                   | Approved .NET 11 backend work with test-first development and minimal abstractions.          |
+| [Member Services Accessibility Expert](.github/agents/accessibility-expert.agent.md) | Angular forms, keyboard navigation, focus, semantics, and accessibility review.              |
+| [Member Services Test Strategist](.github/agents/test-strategist.agent.md)           | Planning-only, risk-based coverage across member journeys, contracts, and operational risks. |
+| [API Breaking Change Detector](.github/skills/api-breaking-change-detector/SKILL.md) | Read-only comparison of C# endpoints and DTOs against Angular/TypeScript consumers.          |
+| [Test Gap Audit](.github/skills/test-gap-audit/SKILL.md)                             | Read-only review of missing or weak behavioral tests and contract coverage.                  |
+| [C# instructions](.github/instructions/csharp.instructions.md)                       | Backend language, async, error handling, and test conventions.                               |
+| [Security instructions](.github/instructions/security.instructions.md)               | Identity, member ownership, safe input handling, and privacy.                                |
+| [Accessibility instructions](.github/instructions/accessibility.instructions.md)     | Scoped Angular accessibility guidance.                                                       |
+| [QA Engineering Best Practices](.github/instructions/qa.instructions.md)             | Complementary QA guidance scoped to `tests/**/*` and `specs/**/test-plan.md`.                |
 
 Select the named agent in a supporting client, or explicitly reference its file.
 Example requests:
@@ -108,6 +110,19 @@ Example requests:
   authorization tests without changing files."
 - "Review this profile form with Member Services Accessibility Expert. Separate
   source findings from browser behavior you could not verify."
+- "Use Member Services Test Strategist for the feature I identify. Propose
+  risk-based coverage in conversation, flag missing requirements and reviews,
+  and do not write or execute tests."
+- "Review this feature's test-plan.md against QA Engineering Best Practices.
+  Keep assumptions proposed and report missing evidence without running checks."
+
+The Test Strategist explicitly reads the scoped QA instructions. It may explore
+coverage before final specs, but does not choose architecture, replace Spec Kit
+artifacts, or advance approval gates. Feature test documents are saved only when
+requested under `specs/<feature>/`, following documentation approval rules.
+Implementation and execution need separate explicit authorization and applicable
+approvals. Contract-drift and test-gap reviews complement the strategy; neither
+proves runtime behavior or measured coverage.
 
 The test-gap skill includes the upstream standard-library Python helper.
 Python 3.10+ is optional: the skill supports manual inspection without it.
@@ -116,8 +131,9 @@ Angular heuristics require manual confirmation. See the skill for invocation
 and limitations.
 
 These resources do not choose architecture, install application packages, or
-bypass Spec Kit approvals. Browser-testing, CI hardening, and infrastructure
-helpers remain deferred. The existing Spec Kit skills are unchanged.
+bypass Spec Kit approvals. Playwright, AI Team QA, Quality Playbook, browser-testing,
+CI hardening, and infrastructure helpers remain deferred. The existing Spec Kit
+skills are unchanged.
 Source revisions and license notices are included in the attribution file above.
 
 ## Repository checks
