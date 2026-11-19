@@ -124,6 +124,10 @@ Implementation and execution need separate explicit authorization and applicable
 approvals. Contract-drift and test-gap reviews complement the strategy; neither
 proves runtime behavior or measured coverage.
 
+The [project test matrix](docs/test-matrix.md) is a draft inventory of existing
+foundation checks and proposed demo scenarios, with traceability, evidence, and
+review blockers. It does not authorize implementation or test execution.
+
 The test-gap skill includes the upstream standard-library Python helper.
 Python 3.10+ is optional: the skill supports manual inspection without it.
 The helper's file-match ratio is not measured line coverage, and its C# and
