@@ -7,8 +7,8 @@
 identifier as `004-profile-nickname`; this is not the physical branch name.
 
 **GitHub Milestone**: [004 Profile nickname](https://github.com/dmd0822/member-profile-demo/milestone/4).
-Its plan link is pending publication of these planning changes. Task issues are
-created or reused in the later tasks phase, not by this plan.
+The milestone links the specification and plan. Task issues are created or
+reused in the later tasks phase, not by this plan.
 
 **Status**: Proposed design. Dave Davis (@dave-microsoft), acting as product
 owner and tech lead, approved the spec for planning on 2026-11-20. Design,
