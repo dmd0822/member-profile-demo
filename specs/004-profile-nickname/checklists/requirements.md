@@ -31,11 +31,12 @@
 
 ## Notes
 
-- The unchecked outcome requires implementation and evaluation; the draft
-  specifies outcomes but does not claim they have been met.
-- Product owner and tech lead spec review is required. The existing demo
-  restricts member edits to contact fields; the proposed nickname exception and
-  affected artifacts and issues must be reconciled in approved subsequent work.
+- The unchecked outcome requires implementation and evaluation; the specification
+  defines outcomes but does not claim they have been met.
+- Dave Davis (@dave-microsoft), acting as product owner and tech lead, approved
+  the specification for planning on 2026-11-20. The existing demo restricts
+  member edits to contact fields; the proposed nickname exception and affected
+  artifacts and issues must be reconciled in approved subsequent work.
 - Length, character, and normalization decisions require review before
   implementation; the underlying profile journeys and design/security/privacy
   approvals are also prerequisites.

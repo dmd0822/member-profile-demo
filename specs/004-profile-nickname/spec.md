@@ -4,7 +4,12 @@
 
 **Created**: 2026-11-20
 
-**Status**: Draft; product owner and tech lead review required
+**Status**: Approved for planning by Dave Davis (@dave-microsoft), acting as
+product owner and tech lead, on 2026-11-20
+
+**Approval scope**: Dave Davis explicitly approved this specification in both
+roles for planning. This does not approve the proposed design or authorize
+implementation or deployment.
 
 **Input**: User description: "I have been asked by the business to allow the user to add a nickname to their profile."
 
@@ -13,7 +18,13 @@ both the member and authorized staff. This specification proposes a change to
 the [member profile demo](../002-member-profile-demo/spec.md); it does not
 describe implemented functionality or authorize implementation.
 
-## User Scenarios & Testing *(mandatory)*
+## Clarifications
+
+### Session 2026-11-20
+
+- Q: How should saving work when a member edits both their nickname and contact details? → A: Allow one save for the explicitly edited fields.
+
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Manage My Nickname (Priority: P1)
 
@@ -37,8 +48,9 @@ revisit the profile, change it, and remove it.
 7. **Given** a nickname change succeeds, **When** its audit event is reviewed, **Then** it records the required operation and outcome without the nickname value.
 8. **Given** the required audit event cannot be recorded, **When** the member attempts a nickname change, **Then** the change is not committed and the failure is reported.
 9. **Given** a member uses a keyboard or assistive technology, **When** they manage their nickname, **Then** the field, instructions, errors, and save outcome are accessible without relying on color alone.
-10. **Given** a member adds or changes a nickname, **When** the profile is saved, **Then** the existing name, sign-in identity, verified association, and other profile fields remain unchanged.
+10. **Given** a member changes only a nickname, **When** the profile is saved, **Then** the existing name, sign-in identity, verified association, and other profile fields remain unchanged.
 11. **Given** a nickname is added or changed using synthetic data, **When** audit events, logs, and traces are inspected, **Then** they do not contain the nickname value.
+12. **Given** a member explicitly edits their nickname and permitted contact details, **When** they save the profile, **Then** both changes are saved together and other fields remain unchanged.
 
 ### User Story 2 - View a Member's Nickname (Priority: P2)
 
@@ -69,13 +81,13 @@ each profile as authorized staff and attempt access without staff entitlement.
 - Members may choose the same nickname; a nickname does not establish identity
   or ownership.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
 - **FR-001**: A verified member MUST be able to add, change, and clear the optional nickname on their own linked profile.
 - **FR-002**: The member and authorized staff viewing that profile MUST see its saved nickname when present; when absent, the profile MUST remain usable without requiring one.
-- **FR-003**: The nickname MUST be distinct from the existing profile name. Changing it MUST NOT change the profile name, sign-in identity, verified association, or other profile fields.
+- **FR-003**: The nickname MUST be distinct from the existing profile name. A nickname-only change MUST NOT change the profile name, sign-in identity, verified association, or other profile fields. Members MUST be able to save explicitly edited nickname and permitted contact fields together without changing other fields.
 - **FR-004**: A saved nickname MUST persist for subsequent profile views. Clearing it, including by submitting only whitespace, MUST leave no nickname.
 - **FR-005**: The existing member ownership, verification, and staff-entitlement boundaries MUST apply to nickname reads and changes. An account without access to a profile MUST NOT obtain its nickname.
 - **FR-006**: Nickname changes MUST follow the existing profile requirements for privacy-safe audit, error reporting, and protection against conflicting updates. A change MUST NOT be reported as successful if its required audit event or save fails.
@@ -87,7 +99,7 @@ each profile as authorized staff and attempt access without staff entitlement.
 - **Member profile**: The existing member record, with an optional nickname separate from its existing name.
 - **Nickname**: A member-selected profile value visible to its verified owner and authorized staff. It is not a unique identifier.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
@@ -107,13 +119,13 @@ each profile as authorized staff and attempt access without staff entitlement.
 - The member profile demo is a synthetic-data proposal, not an implemented
   profile service. Its verified-member and authorized-staff profile journeys
   are prerequisites for this feature.
-- This draft proposes an exception to the existing demo's contact-only member
-  editing rule in [FR-007](../002-member-profile-demo/spec.md). Product owner
-  and tech lead review must resolve the change before implementation; affected
-  demo requirements, proposed contracts, backlog, and linked issues must be
-  reconciled as part of approved subsequent work.
+- This specification proposes an exception to the existing demo's contact-only member
+  editing rule in [FR-007](../002-member-profile-demo/spec.md). The nickname
+  specification is approved for planning; affected demo requirements, proposed
+  contracts, backlog, and linked issues must be reconciled as part of approved
+  subsequent work before implementation.
 - Nickname length, permitted characters, and any normalization require
   product, design, security, and privacy review before implementation; no
   silent truncation is permitted.
 - The existing demo's design, security, and privacy approvals remain pending.
-  Approval of this draft is not assumed, and no deployment is authorized.
+  Approval for planning does not authorize implementation or deployment.
